@@ -17,9 +17,12 @@ def Main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Miki i Maksiu <333333")
     clock = pygame.time.Clock()
+    bgmusic = pygame.mixer.music.load("Assets/Sounds/bgsound.mp3")
+    pygame.mixer.music.set_volume(0.1)
+    bgmusic = pygame.mixer.music.play(-1)
 
     # Images
-    bgimage = pygame.image.load("BSS_Backrooms/Assets/Textures/background.png")
+    bgimage = pygame.image.load("Assets/Textures/background.png")
     bgimage = pygame.transform.scale(bgimage, (WIDTH, HEIGHT))
     # Main game loop
     while True:
