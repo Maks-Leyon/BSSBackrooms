@@ -5,8 +5,8 @@ from Map import Map
 Map = Map()
 class Player:
     def __init__(self):
-        self.x = WIDTH //2
-        self.y = HEIGHT //2
+        self.x = 12 * TILE_SIZE
+        self.y = 13 * TILE_SIZE
         self.angle= -(math.pi/2)
         self.speed = 1.6
         self.rotationSpeed = 0.03

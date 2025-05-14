@@ -2,7 +2,7 @@ from Settings import *
 from Map import Map
 
 NUM_RAYS = int(WIDTH / 4)
-MAX_DEPTH = 600
+MAX_DEPTH = 400
 DELTA_ANGLE = FOV / NUM_RAYS
 DIST = NUM_RAYS / (2 * math.tan(FOV / 2))
 # Basically:
