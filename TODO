@@ -1,0 +1,23 @@
+Zrobione:
+    - Proces Raycastingu*
+        * Optymalizacja Raycastingu
+    - Generacja Mapy**
+    - Czarna mgła gdy promienie z raycastingu osiagaja limit
+    - Dla NextBota:
+        - Render NextBota
+
+TODO:
+    ** Znajdźki na mapie, w tym:
+        - Jakiś sposób na odzyskiwanie życia, zwiększanie szybkości
+        - Sposób na zdobycie broni/amunicji
+        - Generacja wyjścia/przejścia na nstępne piętro
+    - NextBot enemy, w tym:
+        - A* pathfinding (albo dijkstra XD), dzięki któremu może się poruszać
+        - System przegranej (gracz zostal złapany)
+    - System broni/strzelania w NextBota, aby można było go zestunować
+
+OPTIONAL/ASSETS:
+    - Tekstury scian, ziemi, broni itp
+    - Muzyczka do wyboru
+    - Główne Menu? <- Do tego wymagane przechodzenie między scenami
+    - LORE

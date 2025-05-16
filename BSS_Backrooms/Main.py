@@ -1,29 +1,31 @@
 import pygame
+import numpy as np
 import math
 import sys
 
 from Settings import *
-pygame.init()
 from Map import Map
 from Player import Player
-from RayCasting import RayCasting
+from Renderer import Renderer, floor_casting, cast_ray
 
-
+pygame.init()
 Map = Map()
 Player = Player()
-RayCasting = RayCasting()
+Renderer = Renderer(pygame)
+# Stworzony DrawManager dla poukładania
 
 def Main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Miki i Maksiu <333333")
     clock = pygame.time.Clock()
-    bgmusic = pygame.mixer.music.load("BSS_Backrooms/Assets/Sounds/bgsound.mp3")
-    pygame.mixer.music.set_volume(0.1)
-    bgmusic = pygame.mixer.music.play(-1)
+    pygame.mixer.music.load("Assets/Sounds/bg_dark.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
 
-    # Images
-    bgimage = pygame.image.load("BSS_Backrooms/Assets/Textures/background.png")
-    bgimage = pygame.transform.scale(bgimage, (WIDTH, HEIGHT))
+    sprite = pygame.image.load("Assets/Enemy/rock.png")
+    spsize = np.asarray(sprite.get_size())
+    spx, spy = 13, 15
+
     # Main game loop
     while True:
         for event in pygame.event.get():
@@ -33,19 +35,22 @@ def Main():
 
         # Movement
         keys = pygame.key.get_pressed()
-        Player.move(keys)
+        Player.move(keys, clock.tick())
+        print(Player.x//TILE_SIZE, Player.y//TILE_SIZE)
 
-        # Draw
-        screen.fill((0, 0, 0))
-        pygame.draw.rect(screen, (100, 100, 100), (0, 0, WIDTH, HALF_HEIGHT)) # Sky
-        #Draw background
-        screen.blit(bgimage, (0 ,0))
-        pygame.draw.rect(screen, (50, 50, 50), (0, HALF_HEIGHT, WIDTH, HALF_HEIGHT))  # Floor
+        #
+        Renderer.frame = floor_casting(Renderer.frame, Renderer.floorimage)
+        surf = pygame.surfarray.make_surface(Renderer.frame*255)
+        surf = pygame.transform.scale(surf, (WIDTH, HEIGHT))
+        screen.blit(surf, (0, 0))
 
-        RayCasting.ray_casting(screen, Player.x, Player.y, Player.angle)
+        z_buffer = cast_ray(Player.x, Player.y, Player.angle, Map.game_map)
+
+        Renderer.draw_walls(screen, z_buffer, Player.angle)
+
+        Renderer.draw_sprite(screen, sprite, spx, spy, spsize, Player.x, Player.y, Player.angle, z_buffer, pygame)
 
         pygame.display.flip()
-        clock.tick(60)
 
 if __name__ == "__main__":
     Main()

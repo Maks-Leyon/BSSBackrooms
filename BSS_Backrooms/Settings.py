@@ -13,6 +13,7 @@ CYAN = (0, 255, 255)
 #
 WIDTH, HEIGHT = 800, 600
 HALF_HEIGHT = HEIGHT // 2
+VRESOLUTION = int(HALF_HEIGHT // 3) #Zakładam że wertykalna rozdzielczość to połowa wysokości, a to jest połowa tego
 TILE_SIZE = 64
 MAP_WIDTH = 20 * TILE_SIZE
 MAP_HEIGHT = 20 * TILE_SIZE
