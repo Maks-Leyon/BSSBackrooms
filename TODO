@@ -5,6 +5,8 @@ Zrobione:
     - Czarna mgła gdy promienie z raycastingu osiagaja limit
     - Dla NextBota:
         - Render NextBota
+    - Glowne menu
+
 
 TODO:
     ** Znajdźki na mapie, w tym:
@@ -12,12 +14,14 @@ TODO:
         - Sposób na zdobycie broni/amunicji
         - Generacja wyjścia/przejścia na nstępne piętro
     - NextBot enemy, w tym:
-        - A* pathfinding (albo dijkstra XD), dzięki któremu może się poruszać
+        - A* pathfinding (albo dijkstra XD), dzięki któremu może się poruszać XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
         - System przegranej (gracz zostal złapany)
     - System broni/strzelania w NextBota, aby można było go zestunować
+    - po nacisnieciu natspuej wyjscie do Menu w tym momencie zapis i mozliwosc powrotu do tamtego stanu gry
 
 OPTIONAL/ASSETS:
     - Tekstury scian, ziemi, broni itp
     - Muzyczka do wyboru
-    - Główne Menu? <- Do tego wymagane przechodzenie między scenami
+
     - LORE
+    - Stworzenie napisow koncowych
