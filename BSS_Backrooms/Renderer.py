@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 
-# Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro
+# Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro i ktora jednoczesnie 2x wolniej laduje gre
 from numba import njit
 
 from Settings import *
