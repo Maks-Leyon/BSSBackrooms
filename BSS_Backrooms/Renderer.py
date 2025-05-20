@@ -1,5 +1,8 @@
 import numpy as np
 import pygame
+import json
+import yaml
+import toml
 
 # Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro i ktora jednoczesnie 2x wolniej laduje gre
 from numba import njit
@@ -146,3 +149,37 @@ class Renderer:
                             # Rysujemy kolumnę sprite'a na ekranie
                             screen.blit(column, (xi, screen_y))
                             #print("rendering!")
+
+
+    @njit() #konwertery dla usprawnienia programu
+    def converter(file, stary, nowy):
+        with open(file, "r") as f:
+            data = f.read()
+
+        data_new = None
+
+        match stary:
+            case "yaml":
+                data_new = yaml.safe_load(data)
+            case "json":
+                data_new = json.loads(data)
+            case "toml":
+                data_new = toml.loads(data)
+            case _:
+                raise ValueError(f"{stary} to nie jest typ, podaj yaml,json lub toml")
+
+        match nowy:
+            case "yaml":
+                with open("convertedYAML.yaml", 'w') as f:
+                    yaml.dump(data_new, f)
+                print("OK")
+            case "json":
+                with open("convertedJSON", "w") as f:
+                    json.dump(data_new, f, indent=3)
+                print("ok")
+            case "toml":
+                with open("convertedTOML", "w") as f:
+                    toml.dump(data_new, f)
+                print("OK")
+            case _:
+                raise ValueError(f"{nowy} zly typ, podaj yaml,json lub toml")
