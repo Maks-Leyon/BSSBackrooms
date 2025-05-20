@@ -1,4 +1,5 @@
 import numpy as np
+import pygame
 
 # Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro
 from numba import njit
