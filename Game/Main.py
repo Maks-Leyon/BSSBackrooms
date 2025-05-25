@@ -1,12 +1,9 @@
-import pygame
-import numpy as np
-import math
 import sys
 
-from Settings import *
+import pygame
 
 from Player import Player
-from Renderer import Renderer, floor_casting, cast_ray
+from Renderer import Renderer
 from StageManager import StageManager
 
 pygame.init()

@@ -1,14 +1,10 @@
 import numpy as np
-import pygame
-import json
-import yaml
-import toml
 
 # Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro i ktora jednoczesnie 2x wolniej laduje gre
 from numba import njit
 
 from Settings import *
-from Map import Map
+from Game.Map import Map
 
 NUM_RAYS = int(WIDTH / 4) #Resolution
 MAX_DEPTH = 400
@@ -151,7 +147,7 @@ class Renderer:
                             #print("rendering!")
 
 
-    @njit() #konwertery dla usprawnienia programu
+    """@njit() #konwertery dla usprawnienia programu
     def converter(file, stary, nowy):
         with open(file, "r") as f:
             data = f.read()
@@ -182,4 +178,4 @@ class Renderer:
                     toml.dump(data_new, f)
                 print("OK")
             case _:
-                raise ValueError(f"{nowy} zly typ, podaj yaml,json lub toml")
+                raise ValueError(f"{nowy} zly typ, podaj yaml,json lub toml")"""

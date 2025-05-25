@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PythonBackrooms.iml" filepath="$PROJECT_DIR$/.idea/PythonBackrooms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BSSBackrooms.iml" filepath="$PROJECT_DIR$/.idea/BSSBackrooms.iml" />
     </modules>
   </component>
 </project>

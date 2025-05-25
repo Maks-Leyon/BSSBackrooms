@@ -1,6 +1,6 @@
 import pygame
 from Settings import *
-from Map import Map
+from Game.Map import Map
 
 Map = Map()
 class Player:
@@ -35,7 +35,7 @@ class Player:
             dx -= self.speed * math.cos(self.angle) * framerate
             dy -= self.speed * math.sin(self.angle) * framerate
 
-
+        print(self.x//TILE_SIZE, self.y//TILE_SIZE, self.angle)
 
         if not Map.is_wall(self.x + dx, self.y):
             self.x += dx
@@ -43,8 +43,3 @@ class Player:
         if not Map.is_wall(self.x, self.y + dy):
             self.y += dy
             #print(self.y, "< - Moj x hehe")
-
-
-
-
-

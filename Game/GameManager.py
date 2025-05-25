@@ -11,16 +11,18 @@ class Game:
         self.player = Player()
         self.renderer = Renderer(pygame)
 
-        self.sprite = pygame.image.load("Assets/Enemy/rock.png")
+        self.sprite = pygame.image.load("Assets/Textures/rock.png")
         self.spsize = np.asarray(self.sprite.get_size())
         self.spx, self.spy = 13, 15
+        pygame.mixer.music.load("Assets/Sounds/bg_dark.mp3")
+        pygame.mixer.music.set_volume(0.0)
+        pygame.mixer.music.play(-1)
 
     def update(self, events, fps):
-        pygame.mixer.music.load("Assets/Sounds/bg_dark.mp3")
         pygame.mixer.music.set_volume(0.5)
-        pygame.mixer.music.play(-1)
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                pygame.mixer.music.set_volume(0.0)
                 return "menu"  # tutaj trzeba bedzei ddoac zapis postepu
 
         keys = pygame.key.get_pressed()

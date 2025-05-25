@@ -1,5 +1,5 @@
 import pygame
-from Settings import *
+from Game.Settings import *
 
 class Button:
     def __init__(self,rect,text,font_size = 40,color_if_ON = BLUE , color_if_not = RED,text_color = WHITE):

@@ -1,6 +1,6 @@
 import pygame
-from Button import Button
-from Settings import *
+from UI import Button
+from Game import Settings
 
 class Menu:
     def __init__(self, screen):
@@ -11,7 +11,7 @@ class Menu:
 
 
         self.buttons = [
-            Button((x, y, szer, wys), "Start"),Button((x, y + 100,szer,wys ), "Options"),Button((x, y + 200,szer,wys ), "Exit"),
+            Button.Button((x, y, szer, wys), "Start"),Button.Button((x, y + 100,szer,wys ), "Options"),Button.Button((x, y + 200,szer,wys ), "Exit"),
         ]
 
         self.font = pygame.font.SysFont(None, 60)
@@ -36,7 +36,7 @@ class Menu:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        title_surf = self.font.render("A zrobiles konwertery", True, WHITE)
+        title_surf = self.font.render("A zrobiles konwertery", True, Settings.WHITE)
         self.screen.blit(title_surf, (self.screen.get_width() // 2 - title_surf.get_width() // 2, 100))
 
         for button in self.buttons:

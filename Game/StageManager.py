@@ -1,8 +1,8 @@
 import pygame
 import sys
-from Menu import Menu
-from Game import Game
-from Options import Options
+from GameManager import Game
+from UI.Menu import Menu
+from UI.Options import Options
 
 class StageManager:
     def __init__(self, screen):
@@ -32,5 +32,3 @@ class StageManager:
         elif self.stage == "options":
             new_stage = self.options.update(events)
             self.stage = new_stage
-
-

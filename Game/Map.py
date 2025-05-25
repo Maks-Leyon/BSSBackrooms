@@ -43,5 +43,3 @@ class Map:
 
     def render(self,screen,x,y,width,height,color):
         pygame.draw.rect(screen,(color,color,color),(x,y,width,height))
-
-
