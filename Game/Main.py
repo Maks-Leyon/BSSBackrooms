@@ -20,7 +20,7 @@ def Main():
 
 
 
-    stage_manager = StageManager(screen)
+    stage_manager = StageManager(screen, Player)
 
     running = True
     while running:

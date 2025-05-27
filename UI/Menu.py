@@ -11,7 +11,8 @@ class Menu:
 
 
         self.buttons = [
-            Button.Button((x, y, szer, wys), "Start"),Button.Button((x, y + 100,szer,wys ), "Options"),Button.Button((x, y + 200,szer,wys ), "Exit"),
+            Button.Button((x, y, szer, wys), "Start"),Button.Button((x, y + 100,szer,wys ), "Options"),
+            Button.Button((x, y + 200,szer,wys ), "Exit"),
         ]
 
         self.font = pygame.font.SysFont(None, 60)

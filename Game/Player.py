@@ -10,6 +10,7 @@ class Player:
         self.angle= -(math.pi/2)
         self.speed = 0.05
         self.rotationSpeed = 0.001
+        self.music = 1
 
     # Na necie przeczytalem ze jak pomnozysz przez clock.tick() to wtedy masz szybkosc niezależną od fps wiec nie bedzie
     # np. roznych szybkosci na lepszych/gorszych kompach

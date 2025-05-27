@@ -3,13 +3,15 @@ import sys
 from GameManager import Game
 from UI.Menu import Menu
 from UI.Options import Options
+from Game.Player import Player
 
 class StageManager:
-    def __init__(self, screen):
+    def __init__(self, screen, player):
         self.screen = screen
+        self.player = player
         self.menu = Menu(screen)
-        self.game = Game(screen)
-        self.options = Options(screen)
+        self.game = Game(screen,player)
+        self.options = Options(screen, player)
         self.stage = "menu"
 
     def update(self, events, clock):
@@ -30,5 +32,19 @@ class StageManager:
 
 
         elif self.stage == "options":
-            new_stage = self.options.update(events)
-            self.stage = new_stage
+            result = self.options.update(events)  # result to np. "Creepy", "Szczescie", "Gorycz", "menu" lub "options"
+
+
+            if result == "Creepy":
+                self.player.music = 1
+                self.stage = "options"
+            elif result == "Szczescie":
+                self.player.music = 2
+                self.stage = "options"
+            elif result == "Gorycz":
+                self.player.music = 3
+                self.stage = "options"
+            elif result == "menu":
+                self.stage = "menu"
+            else:
+                self.stage = result

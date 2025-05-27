@@ -3,9 +3,10 @@ from Game.Settings import *
 
 class Button:
     def __init__(self,rect,text,font_size = 40,color_if_ON = BLUE , color_if_not = RED,text_color = WHITE):
+        print(f"font_size: {font_size}")
         self.rect = pygame.Rect(rect) #x,y,szer,wys
         self.text = text
-        self.font = pygame.font.SysFont(None,font_size) #None - domyslna czcionka sysretmu, mozna zmienic
+        self.font = pygame.font.SysFont(None,int(font_size)) #None - domyslna czcionka sysretmu, mozna zmienic
         self.color_if_ON = color_if_ON #jezeli najedzie sie kursorem na guzik to zmienamny kolor
         self.color_if_not = color_if_not #staly kolor guzika
         self.text_color = text_color
