@@ -5,3 +5,5 @@ print(c)
 print(b)
 print(c[0])
 print(c[1])
+
+print()

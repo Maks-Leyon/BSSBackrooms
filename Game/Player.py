@@ -5,8 +5,8 @@ from Game.Map import Map
 Map = Map()
 class Player:
     def __init__(self):
-        self.x = 12 * TILE_SIZE
-        self.y = 13 * TILE_SIZE
+        self.x = 5 * TILE_SIZE # 12 13
+        self.y = 7 * TILE_SIZE
         self.pos = (self.x//TILE_SIZE,self.y//TILE_SIZE)
         self.angle= -(math.pi/2)
         self.speed = 0.05

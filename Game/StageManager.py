@@ -3,6 +3,7 @@ import sys
 from GameManager import Game
 from UI.Menu import Menu
 from UI.Options import Options
+from UI.GameOver import GameOver
 from Player import Player
 
 class StageManager:
@@ -12,6 +13,7 @@ class StageManager:
         self.menu = Menu(screen)
         self.game = Game(screen,player)
         self.options = Options(screen, player)
+      #  self.gameover = None
         self.stage = "menu"
 
     def update(self, events, clock):
@@ -28,7 +30,13 @@ class StageManager:
 
         elif self.stage == "game":
             new_stage = self.game.update(events, clock)
+          #  if new_stage == "gameover":
+           #     self.gameover = GameOver(self.screen,self.game.elapsed_time)
             self.stage = new_stage
+        #elif self.stage == "gameover":
+         #   new_stage = self.gameover.update(events)
+          #  self.stage = new_stage
+
 
 
         elif self.stage == "options":
