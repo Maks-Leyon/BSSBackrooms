@@ -20,7 +20,7 @@ class Options:
 
         self.buttons = [ Button((88,400,150,50), "Creepy"),
                          Button( (325,400,160,50), "Przyjaciele"),
-                         Button((563,400,150,50), "Femobye")]
+                         Button((563,400,150,50), "Femboye")]
 
     def creepZursynowa(self):
         self.player.music = 1
@@ -48,6 +48,7 @@ class Options:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: #jednorazowo za kazda proba klikniecia
                 for button in self.buttons:
                     if button.is_clicked(mouse_pos, mouse_pressed):
+                        print("fueah")
                         return button.text
 
         for event in events:
