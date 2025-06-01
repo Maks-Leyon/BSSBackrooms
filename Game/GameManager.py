@@ -1,11 +1,14 @@
 import pygame
 import numpy as np
 from Map import Map
+from Enemy import Enemy
 from Player import Player
 from Renderer import Renderer, floor_casting, cast_ray
+from Settings import *
 
 class Game:
     def __init__(self, screen, player):
+        self.start = pygame.time.get_ticks()
         self.screen = screen
         self.player = player
         self.current_music = None
@@ -19,16 +22,25 @@ class Game:
         }
 
         self.renderer = Renderer(pygame)
-        self.font = pygame.font.SysFont(None, 30)
+        self.font = pygame.font.SysFont("Arial", 25)
 
-        self.sprite = pygame.image.load("Assets/Textures/rock.png")
-        self.spsize = np.asarray(self.sprite.get_size())
-        self.spx, self.spy = 13, 15
+        self.enemy_sprite = pygame.image.load("Assets/Textures/rock.png")
+
+        #self.spsize = np.asarray(self.enemy_sprite.get_size())
+       # self.spx, self.spy = 13, 15
+        self.enemy = Enemy(13 * TILE_SIZE + TILE_SIZE / 2, 15 * TILE_SIZE + TILE_SIZE / 2, self.map, self.enemy_sprite) #srodek kafla
+
         pygame.mixer.music.load("Assets/Sounds/bg_dark.mp3")
         pygame.mixer.music.set_volume(0.0)
         pygame.mixer.music.play(-1)
 
     def update(self, events, fps):
+        elapsed = pygame.time.get_ticks() - self.start # ile miliseuknd od startu
+        self.min = elapsed // 60000
+        self.sec = (elapsed % 60000) // 1000
+        self.ms = elapsed % 1000
+
+
 
         pygame.mixer.music.set_volume(0.5)
 
@@ -40,6 +52,7 @@ class Game:
 
         keys = pygame.key.get_pressed()
         self.player.move(keys, fps)
+        self.enemy.update(self.player)
 
         if self.player.music != self.current_music:
             self.current_music = self.player.music
@@ -54,8 +67,10 @@ class Game:
         return "game"
 
     def draw_info(self):
-        text_surface = self.font.render(f"Rotation speed: {self.player.rotationSpeed:.4f}", True, (255, 255, 255))
+        text_surface = self.font.render(f"Rotation speed: {self.player.rotationSpeed:.4f}", True, WHITE)
         self.screen.blit(text_surface, (10, 10))
+        timje_surface = self.font.render(f"Timer: {self.min:02}:{self.sec:02}:{self.ms:0}", True, WHITE)
+        self.screen.blit(timje_surface, (600,10))
 
     def change_music(self, music_file):
 
@@ -71,5 +86,13 @@ class Game:
 
         z_buffer = cast_ray(self.player.x, self.player.y, self.player.angle, self.map.game_map)
         self.renderer.draw_walls(self.screen, z_buffer, self.player.angle)
-        self.renderer.draw_sprite(self.screen, self.sprite, self.spx, self.spy, self.spsize,
-                                  self.player.x, self.player.y, self.player.angle, z_buffer, pygame)
+
+        enemy_tile_x = self.enemy.x / TILE_SIZE
+        enemy_tile_y = self.enemy.y / TILE_SIZE
+        enemy_size = np.asarray(self.enemy_sprite.get_size())
+
+        self.renderer.draw_sprite(self.screen, self.enemy_sprite,
+                                  enemy_tile_x, enemy_tile_y,
+                                  enemy_size,
+                                  self.player.x, self.player.y, self.player.angle,
+                                  z_buffer, pygame)

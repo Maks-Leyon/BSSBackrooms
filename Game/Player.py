@@ -36,7 +36,8 @@ class Player:
             dx -= self.speed * math.cos(self.angle) * framerate
             dy -= self.speed * math.sin(self.angle) * framerate
 
-        print(self.x//TILE_SIZE, self.y//TILE_SIZE, self.angle)
+      #  print(self.x//TILE_SIZE, self.y//TILE_SIZE, self.angle)
+        print(f"Gracz poz: x={self.x:.1f}, y={self.y:.1f}, angle mrodo={self.angle}")
 
         if not Map.is_wall(self.x + dx, self.y):
             self.x += dx
