@@ -10,7 +10,6 @@ pygame.init()
 
 Player = Player()
 Renderer = Renderer(pygame)
-# Stworzony DrawManager dla poukładania
 
 def Main():
     pygame.init()

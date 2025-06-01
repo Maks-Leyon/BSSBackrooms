@@ -28,7 +28,7 @@ class Game:
 
         #self.spsize = np.asarray(self.enemy_sprite.get_size())
        # self.spx, self.spy = 13, 15
-        self.enemy = Enemy(13 * TILE_SIZE + TILE_SIZE / 2, 15 * TILE_SIZE + TILE_SIZE / 2, self.map, self.enemy_sprite) #srodek kafla
+        self.enemy = Enemy(13, 15, self.map, self.enemy_sprite) #srodek kafla
 
         pygame.mixer.music.load("Assets/Sounds/bg_dark.mp3")
         pygame.mixer.music.set_volume(0.0)

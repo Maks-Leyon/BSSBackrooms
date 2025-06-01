@@ -3,7 +3,7 @@ import sys
 from GameManager import Game
 from UI.Menu import Menu
 from UI.Options import Options
-from Game.Player import Player
+from Player import Player
 
 class StageManager:
     def __init__(self, screen, player):

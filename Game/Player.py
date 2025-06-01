@@ -7,6 +7,7 @@ class Player:
     def __init__(self):
         self.x = 12 * TILE_SIZE
         self.y = 13 * TILE_SIZE
+        self.pos = (self.x//TILE_SIZE,self.y//TILE_SIZE)
         self.angle= -(math.pi/2)
         self.speed = 0.05
         self.rotationSpeed = 0.001
@@ -37,7 +38,8 @@ class Player:
             dy -= self.speed * math.sin(self.angle) * framerate
 
       #  print(self.x//TILE_SIZE, self.y//TILE_SIZE, self.angle)
-        print(f"Gracz poz: x={self.x:.1f}, y={self.y:.1f}, angle mrodo={self.angle}")
+        #print(f"Gracz poz: x={self.x:.1f}, y={self.y:.1f}, angle mrodo={self.angle}, ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
+        print(f"Gracz: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
 
         if not Map.is_wall(self.x + dx, self.y):
             self.x += dx
@@ -45,3 +47,5 @@ class Player:
         if not Map.is_wall(self.x, self.y + dy):
             self.y += dy
             #print(self.y, "< - Moj x hehe")
+
+        self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)

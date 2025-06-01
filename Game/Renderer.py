@@ -92,8 +92,8 @@ class Renderer:
     # Metoda do rysowania dowolnego sprit'ea na danej pozycji (spx i spy to x i y tego sprite)
     def draw_sprite(self, screen, sprite, spx, spy, spsize, px, py, pangle, z_buffer, pg):
         # Tutaj zamieniamy jego x i y w postaci pozycji na mapie na pozycje pikselowe, + TILE_SIZE //2 zeby byl na srodku tile'a
-        sprite_x = spx * TILE_SIZE + TILE_SIZE // 2
-        sprite_y = spy * TILE_SIZE + TILE_SIZE // 2
+        sprite_x = spx * TILE_SIZE
+        sprite_y = spy * TILE_SIZE
 
         #pitagoras - hypot to doslownie krotszy pitagoras - oblicza droge od gracza do sprite'a
         dx = sprite_x - px
@@ -128,8 +128,19 @@ class Renderer:
                 # Tutaj po prostu tysujemy go w na srodku ekranu zawsze
                 screen_y = int(HEIGHT / 2 - proj_height / 2)
 
-                #Skalujemy go z obliczonymi wymiarami
-                spsurf = pg.transform.scale(sprite, (int(proj_width), int(proj_height)))
+                #Skalujemy go z obliczonymi wymiarami I ZAMIENIAMY NA KANAL ALFA ZEBY AUTOMATYCZNIE ZROBIL MASKE PRZEZROCZYSTYCH PIKSELI
+                spsurf = pg.transform.scale(sprite, (int(proj_width), int(proj_height))).convert_alpha()
+                #tutaj po prostu szybka skala przyciemniana na essie
+                dark = max(0.01, 1 - dist**1.0003 / MAX_DEPTH)
+
+                #bierzemy arraya wszysstkich pikseli gdzie 0 to R, 1 to G i B to 2 elo
+                arr = pg.surfarray.pixels3d(spsurf)
+                arr[:, :, 0] = (arr[:, :, 0] * dark) # przyciemniamy
+                arr[:, :, 1] = (arr[:, :, 1] * dark)
+                arr[:, :, 2] = (arr[:, :, 2] * dark)
+
+                del arr # trza usunac i odblokowac bo inaczej blit sie pruje
+                spsurf.unlock()
 
                 #Potrzebne do wyswietlania czesci sprite'a - iterujemy po kazdym pikselu szerokosci
                 for i in range(int(proj_width)):

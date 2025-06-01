@@ -1,38 +1,26 @@
 import math
+from typing import final
+
 from Settings import *
 
 class Enemy:
     def __init__(self, x, y, map_obj, sprite):
-        self.x = x # w gameManager robie /2 zeby byl srodek kafla, mozna tez tu niby
-        self.y = y
+        self.x = x * TILE_SIZE + TILE_SIZE // 2
+        self.y = y * TILE_SIZE + TILE_SIZE // 2
         self.map = map_obj
         self.sprite = sprite
-        self.speed = 2.0
+        self.speed = 0.7
+        self.route = []
 
 
     #aktualna pozycja przceiwnika
     def current_tile(self):
-        return (int(self.x // TILE_SIZE), int(self.y // TILE_SIZE))
+        return int(self.x // TILE_SIZE), int(self.y // TILE_SIZE)
     #to samo co w graczu, zeby indeksowac na tablicy a nie na piksleach
 
 
 
-    # ogolem zamyls byl taki ze w momencie jak on zmienia pozcyje i jest na innym tile,
-    #to autoamtycznie sprawdza najblisze cztery swoje boki ze prawo lewo tyl przod i sprawdzal te
-    # do ktorych moze przejsc, cchailem ograniczcy by nie wlazil w sciany - udalo sie polowicznie bo
-    #wchodzi czasami polowa ciala w sciany boczne - do naprawy
-    def get_free_tile(self, tile):
-        x, y = tile
-        knn = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)] # wspolrzedfne cztery
-        scianyktoresaKoks = []
-        for nx, ny in knn:
-            if 0 <= ny < self.map.game_map.shape[0] and 0 <= nx < self.map.game_map.shape[1]: # wymiary mapy
-                px = (nx + 0.5) * TILE_SIZE
-                py = (ny + 0.5) * TILE_SIZE
-
-                if not self.map.is_wall(px, py):
-                    scianyktoresaKoks.append((nx, ny))
-        return scianyktoresaKoks # tutaj juz wrzcuam tylko te po ktoruch moze isc
+    # MAKS-LEYON: przenioslem znajdywanie sasiadow do Map.py zbey bylo bardziej intuicyjnie
 
 
     # odelglsoc Manhattana, o tyle lepsza ze dziaal na poruszasnie sie TEORETYCZNIE
@@ -40,63 +28,70 @@ class Enemy:
     def SpidermanDistance(self, a, b):
         return abs(a[0]-b[0]) + abs(a[1]-b[1])
 
+    #boze jak ja kocham astar
+    def astar(self, playerpos):
+        start_tile = self.map.get_tile(self.current_tile()) #poczatkowy tile (na ktorym stoi gruby)
+        target_tile = self.map.get_tile(playerpos) # tile gracza
+        opent = [] #lista tile'ow do odwiedzenia
+        closedt = [] #lista odwiedonych
+        opent.append(start_tile) #dodajemy pocaztkowy
+        #print(opent)
+
+        while True: #mega fajny while true
+            if not any(opent):
+                return [] #to sie nie powinno nigdy zdarzyc ale mi wywalalo bledy wiec jest i nie ruszaj tego
+            current_tile = min(opent, key=lambda t: t.cost) #znajduje kafel o najtanszym koszcie
+            #print("Step 1:",any(opent),"iswall:", self.map.is_wall(current_tile.center[0], current_tile.center[1]), current_tile.x, current_tile.y)
+            opent.remove(current_tile) #odwiedzil wiec usuwa z open i wstawia do closed
+            closedt.append(current_tile)
+
+            if current_tile == target_tile: #jesli to jest nasz target to resetujemy wszystkie tile i zwracamy sciezke
+                route = current_tile.get_path(start_tile)
+                for tile in opent:
+                    tile.cost = 0
+                    tile.path = None
+                for tile in closedt:
+                    tile.cost = 0
+                    tile.path = None
+                return route # tu zwracamy sciezke o tutaj tu ja zwracamy
+
+            for tile in self.map.get_tile_neighbours(current_tile): # dla kazdego sasiada
+                if self.map.is_wall(tile.center[0], tile.center[1]) or (tile in closedt): # ignorujemy jesli odwiedzony lub sciana
+                    continue
+                # kalkulacja kosztu - dystans od konca + dystans od poczatku
+                cstart = tile.get_distance(start_tile)
+                cend = tile.get_distance(target_tile)
+                c = cstart + cend
+                # jesli pierwsze napotkanie, lub nowy koszt jest lepszy to zmieniamu
+                if tile not in opent or tile.cost > c:
+                    tile.cost = c
+                    tile.parent = current_tile # tu wazne bo teraz kafel wskazuje na poprzedni dzieki czemu tworzy sie sciezka
+                    if tile not in opent:
+                        opent.append(tile)
+
     def update(self, player):
         player_tile = (int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) #pozycja gracza caly czas zeby mogl skedzic jak chciales
         current = self.current_tile() # aktual pozycja przeciwnika
+        self.route = self.astar(player.pos) # sciezka hell yeah baby
 
+        if current != player_tile and any(self.route) and len(self.route) > 0: #czy sciezka jest wgl
+            next_tile = self.route[0] # bierze nastepny kafel no i ogolnie [0] bo jak dochodzi do kafla no to juz ogarnia nastepny es
+            target_x, target_y = next_tile.center # jego srodek
 
-        #Tutaj bedzei trzeba dodac potem metody jakiegos ataku czy cos
-        if current != player_tile: # idk czemu jak sie nie ruszam szczerez to to nie dziala XD
-            sasiednie = self.get_free_tile(current)
-            print(f"Neighbors: {sasiednie}") #debug
-            if sasiednie:
-                # zabrane z projetku knn Nai pozdro wielkie, zwracasz najblizszego sasiada knn lambda
-                next_tile = min(sasiednie, key=lambda t: self.SpidermanDistance(t, player_tile)) # tutaj sprawiam zeby wybieral ten kafel ktory jest nablizej do gracza wiec on zawsze wybierez kierunek w nasza storne
-                target_x = (next_tile[0] + 0.5) * TILE_SIZE #nadal probuje wysriodkowac
-                target_y = (next_tile[1] + 0.5) * TILE_SIZE
+            #zmiana we wspolrzednych
+            dx = target_x - self.x
+            dy = target_y - self.y
 
-
-
-                dx = target_x - self.x
-                dy = target_y - self.y
-
-
-                #Ogolem tak, wpeirw zrobilem odlelosc euklidesowa, ogolem on wtedy gubil sie na prostych
-                #drtogach i zakrecal w sciane czasami, jak szlo sie tlyko po x, natomiast druga wersja ktora obecnie
-                #dziala jest spoko, on chodzi okej ale jak przejdziesz na wiecej niz 2  zakrety on omija sciane - spojrz na to prosze
-
-                '''dist = math.hypot(dx, dy)
-
-                if dist < self.speed:
-                    self.x = target_x
-                    self.y = target_y
-                else:
-                    self.x += (dx / dist) * self.speed
-                    self.y += (dy / dist) * self.speed'''
-
-
-                #dobra, ooglem troche znalzlem tego na githubie
-                if abs(dx) > abs(dy): # check czy idzie w pionie czy poziomie
-                    step = self.speed if dx > 0 else -self.speed # pytanie czyu lewo czy prawo. Maksie P
-                    new_x = self.x + step
-                    new_y = self.y
-                    if not self.map.is_wall(new_x, new_y):
-                        if abs(dx) < abs(step):
-                            self.x = target_x
-                        else:
-                            self.x = new_x
-
-                else:
-                    step = self.speed if dy > 0 else -self.speed
-                    new_x = self.x
-                    new_y = self.y + step
-                    if not self.map.is_wall(new_x, new_y):
-                        if abs(dy) < abs(step):
-                            self.y = target_y
-                        else:
-                            self.y = new_y
+            dist = math.hypot(dx, dy)
+            if dist < self.speed:
+                self.x = target_x
+                self.y = target_y
+            else:
+                self.x += (dx / dist) * self.speed
+                self.y += (dy / dist) * self.speed
 
 
         # trzeba wykminic i dodac tak jak pisalem wyzej implemetnacje w tym miejscu co sie dzieej jak gracz i gruby stoja na tym samym poly
 
-        print(f"Enemy pozcyja: x={self.x:.1f}, y={self.y:.1f}, tile={self.current_tile()}")
+        #print(f"Enemy pozcyja: x={self.x:.1f}, y={self.y:.1f}, tile={self.current_tile()}")
+        print(f"Gruby: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
