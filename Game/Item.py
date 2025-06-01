@@ -25,6 +25,8 @@ class Item:
 
     def draw(self):
 
+
+
         # by odczytywac z notatki, w momencei gdy jest otwarta robie cvaly czafny ekran, dodatkowa metoda multiline_text sluzy do tego by obslugiwac
         #teskt z /n gdyz sam font.render nie ogarnia takiej nowoczesnosci
         if self.open_note:

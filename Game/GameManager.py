@@ -28,11 +28,15 @@ class Game:
         self.font = pygame.font.SysFont("Arial", 25)
 
 
-        self.note = pygame.image.load("Assets/Textures/note.png")
+        self.note = pygame.image.load("Assets/Textures/mikserToGoat.png")
+
+
+
         self.Notes = Item(self.note, self.font, self.screen)
 
 
-        self.enemy_sprite = pygame.image.load("Assets/Textures/rock.png")
+       # self.enemy_sprite = pygame.image.load("Assets/Textures/rock.png")
+        self.enemy_sprite = pygame.image.load("Assets/Textures/konwerterJSONnaYAML.png")
 
 
         #self.spsize = np.asarray(self.enemy_sprite.get_size())
@@ -131,6 +135,7 @@ class Game:
         self.Notes.draw()
 
 
+
         enemy_tile_x = self.enemy.x / TILE_SIZE
         enemy_tile_y = self.enemy.y / TILE_SIZE
         enemy_size = np.asarray(self.enemy_sprite.get_size())
@@ -140,3 +145,17 @@ class Game:
                                   enemy_size,
                                   self.player.x, self.player.y, self.player.angle,
                                   z_buffer, pygame)
+
+
+
+        if not self.Notes.open_note:
+            note_size = np.asarray(self.note.get_size())
+            for note in self.Notes.notatki:
+                x, y = note["pos"]  # problem z 5,7 na 100%
+                x -= 0.5
+                y -= 0.5
+                self.renderer.draw_sprite(self.screen, self.note,
+                                          x, y,
+                                          note_size,
+                                          self.player.x, self.player.y, self.player.angle,
+                                          z_buffer, pygame)

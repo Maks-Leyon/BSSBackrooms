@@ -111,6 +111,7 @@ class Renderer:
 
         # Sprawdzamy czy jest w render distance (MAX_DEPTH)
         if dist < MAX_DEPTH:
+
             #Wielkosc sprite'a zaleznie od odleglosci - 500 to losowa liczba ktora dalem
             proj_height = (TILE_SIZE / dist) * 500
             #Jego szerokosc proporcjonalna do texkstury
