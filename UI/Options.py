@@ -22,6 +22,7 @@ class Options:
                          Button( (325,400,160,50), "Przyjaciele"),
                          Button((563,400,150,50), "Femboye")]
 
+    #USELSS XDDDDDDDDDDDDDDDDDDDDDD
     def creepZursynowa(self):
         self.player.music = 1
     def maksPalkowskiMaPowiazaniaZFederacjaRosyjska(self):

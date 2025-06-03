@@ -2,13 +2,12 @@ import sys
 
 import pygame
 
+from Map import Map
 from Player import Player
 from Renderer import Renderer
 from StageManager import StageManager
 
 pygame.init()
-
-Player = Player()
 Renderer = Renderer(pygame)
 
 def Main():
@@ -18,8 +17,9 @@ def Main():
     clock = pygame.time.Clock()
 
 
-
-    stage_manager = StageManager(screen, Player)
+    gamemap = Map()
+    p = Player(gamemap)
+    stage_manager = StageManager(screen, p, gamemap)
 
     running = True
     while running:

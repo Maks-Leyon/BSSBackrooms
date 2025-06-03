@@ -114,8 +114,12 @@ class Renderer:
 
             #Wielkosc sprite'a zaleznie od odleglosci - 500 to losowa liczba ktora dalem
             proj_height = (TILE_SIZE / dist) * 500
+            max_proj_height = HEIGHT * 2
+            proj_height = min(proj_height, max_proj_height)
             #Jego szerokosc proporcjonalna do texkstury
             proj_width = proj_height * (spsize[0] / spsize[1])
+
+
             # Kąt odpowiadający połowie szerokości sprite'a na ekranie aby nie znikał nam z pola widzenia jak jest blisko
             half_sprite_angle = (proj_width / 2) / WIDTH * FOV
             # Sprawdzamy czy jakas czesc sprite'a jest w FOV
@@ -131,6 +135,11 @@ class Renderer:
 
                 #Skalujemy go z obliczonymi wymiarami I ZAMIENIAMY NA KANAL ALFA ZEBY AUTOMATYCZNIE ZROBIL MASKE PRZEZROCZYSTYCH PIKSELI
                 spsurf = pg.transform.scale(sprite, (int(proj_width), int(proj_height))).convert_alpha()
+
+                # Jak jest blisko to po propstu rysujemy zeby nie robic trudnych obliczen
+                if dist < 40:
+                    screen.blit(spsurf, (screen_x, screen_y))
+                    return
                 #tutaj po prostu szybka skala przyciemniana na essie
                 dark = max(0.01, 1 - dist**1.0003 / MAX_DEPTH)
 

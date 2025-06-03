@@ -7,10 +7,11 @@ from UI.GameOver import GameOver
 from Player import Player
 
 class StageManager:
-    def __init__(self, screen, player):
+    def __init__(self, screen, player, gamemap):
         self.screen = screen
         self.player = player
         self.menu = Menu(screen)
+        self.map = gamemap
         self.game = Game(screen,player)
         self.options = Options(screen, player)
       #  self.gameover = None

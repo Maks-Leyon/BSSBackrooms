@@ -1,16 +1,20 @@
 import math
 from typing import final
 
+import pygame
+
+from Entity import Entity
+from Map import Map
 from Settings import *
 
-class Enemy:
-    def __init__(self, x, y, map_obj, sprite):
-        self.x = x * TILE_SIZE + TILE_SIZE // 2
-        self.y = y * TILE_SIZE + TILE_SIZE // 2
+class Enemy(Entity):
+    def __init__(self, x, y, map_obj, sprite, mix):
+        Entity.__init__(self, sprite, x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2, sprite.get_size())
         self.map = map_obj
-        self.sprite = sprite
         self.speed = 0.7
         self.route = []
+        self.stamina = 750
+        self.mix = mix
 
 
     #aktualna pozycja przceiwnika
@@ -30,8 +34,8 @@ class Enemy:
 
     #boze jak ja kocham astar
     def astar(self, playerpos):
-        start_tile = self.map.get_tile(self.current_tile()) #poczatkowy tile (na ktorym stoi gruby)
-        target_tile = self.map.get_tile(playerpos) # tile gracza
+        start_tile = Map.get_tile(self.current_tile()) #poczatkowy tile (na ktorym stoi gruby)
+        target_tile = Map.get_tile(playerpos) # tile gracza
         opent = [] #lista tile'ow do odwiedzenia
         closedt = [] #lista odwiedonych
         opent.append(start_tile) #dodajemy pocaztkowy
@@ -72,7 +76,28 @@ class Enemy:
     def update(self, player):
         player_tile = (int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) #pozycja gracza caly czas zeby mogl skedzic jak chciales
         current = self.current_tile() # aktual pozycja przeciwnika
-        self.route = self.astar(player.pos) # sciezka hell yeah baby
+        self.route = self.astar(player.pos)  # sciezka hell yeah baby
+
+        #distance to odleglosc od gracza euklidesowa ORAZ ilosc kafelkow * 10 zeby gracz nie robil kiwki
+        distance = Entity.distance_to_player(self, player.x, player.y) + 10*len(self.route)
+
+        sound = 1/max(1, distance / 7)
+        self.mix.Channel(1).set_volume(sound)
+
+        #bieg enemy
+        if distance < 310:
+            if self.stamina > 1:
+                self.stamina -= 2
+                self.speed = 1.05 + (self.stamina / 1000)
+            else:
+                self.speed = 0.78
+        elif distance < 700:
+            if distance > 340:
+                self.stamina = self.stamina + (1 if self.stamina < 750 else 0)
+            self.speed = 0.72
+        else:
+            self.stamina = 900
+            self.speed = 1.8
 
         if current != player_tile and any(self.route) and len(self.route) > 0: #czy sciezka jest wgl
             next_tile = self.route[0] # bierze nastepny kafel no i ogolnie [0] bo jak dochodzi do kafla no to juz ogarnia nastepny es
@@ -94,4 +119,5 @@ class Enemy:
         # trzeba wykminic i dodac tak jak pisalem wyzej implemetnacje w tym miejscu co sie dzieej jak gracz i gruby stoja na tym samym poly
 
         #print(f"Enemy pozcyja: x={self.x:.1f}, y={self.y:.1f}, tile={self.current_tile()}")
-        print(f"Gruby: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
+        #print(f"Gruby: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
+        print(f"Gruby: (speed={self.speed:.2f}, stamina={self.stamina}), distance={Entity.distance_to_player(self, player.x, player.y):.2f})")

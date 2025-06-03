@@ -26,6 +26,10 @@ class Tile: #Dodałem TILE klasę żeby łatwiej używać a*
         return 10 * (distx + disty)
 
 class Map:
+    tiles = {
+        (0, 0): Tile(0, 0)
+    }
+
     def __init__(self):
         #zamiana na np.array ze zwyklej 2d tablicy zeby dzialalo z numba njit
         self.game_map = np.array([
@@ -55,10 +59,6 @@ class Map:
             [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ])
-        self.tiles = { #mega fajny slownik wspolrzednych i tileow
-            (0,0): Tile(0,0)
-        }
-
     def is_wall(self, x, y):
         i = int(x // TILE_SIZE)
         j = int(y // TILE_SIZE)
@@ -80,15 +80,16 @@ class Map:
                 py = (ny + 0.5) * TILE_SIZE
 
                 if not self.is_wall(px, py):
-                    scianyktoresaKoks.append(self.get_tile((nx, ny)))
+                    scianyktoresaKoks.append(Map.get_tile((nx, ny)))
         return scianyktoresaKoks  # tutaj juz wrzcuam tylko te po ktoruch moze isc
 
-    def get_tile(self, pos): #dodaje tile do slownika jesli nie istnieje, a jesli istnieje to go zwraca
+    @classmethod
+    def get_tile(cls, pos): #dodaje tile do slownika jesli nie istnieje, a jesli istnieje to go zwraca
         x, y = pos[0],pos[1]
-        if (x,y) in self.tiles:
-            return self.tiles[(x,y)]
-        self.tiles[(x,y)] = Tile(x,y)
-        return self.tiles[(x,y)]
+        if (x,y) in Map.tiles:
+            return Map.tiles[(x,y)]
+        Map.tiles[(x,y)] = Tile(x,y)
+        return Map.tiles[(x,y)]
 
     def render(self,screen,x,y,width,height,color):
         pygame.draw.rect(screen,(color,color,color),(x,y,width,height))

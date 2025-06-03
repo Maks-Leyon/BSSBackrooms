@@ -2,16 +2,16 @@ import pygame
 from Settings import *
 from Game.Map import Map
 
-Map = Map()
 class Player:
-    def __init__(self):
+    def __init__(self, gamemap):
         self.x = 12 * TILE_SIZE # 12 13 5 7
         self.y = 13 * TILE_SIZE
         self.pos = (self.x//TILE_SIZE,self.y//TILE_SIZE)
         self.angle= -(math.pi/2)
         self.speed = 0.05
-        self.rotationSpeed = 0.001
+        self.rotationSpeed = 0.002
         self.music = 1
+        self.map = gamemap
 
     # Na necie przeczytalem ze jak pomnozysz przez clock.tick() to wtedy masz szybkosc niezależną od fps wiec nie bedzie
     # np. roznych szybkosci na lepszych/gorszych kompach
@@ -41,10 +41,10 @@ class Player:
         #print(f"Gracz poz: x={self.x:.1f}, y={self.y:.1f}, angle mrodo={self.angle}, ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
         print(f"Gracz: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
 
-        if not Map.is_wall(self.x + dx, self.y):
+        if not self.map.is_wall(self.x + dx, self.y):
             self.x += dx
             #print(self.x, "< - Moj x hehe")
-        if not Map.is_wall(self.x, self.y + dy):
+        if not self.map.is_wall(self.x, self.y + dy):
             self.y += dy
             #print(self.y, "< - Moj x hehe")
 

@@ -2,13 +2,16 @@ Zrobione:
     - Proces Raycastingu*
         * Optymalizacja Raycastingu
     - Generacja Mapy**
+    ** Znajdźki na mapie, w tym:
+        - Karteczki
+        - Menu karteczek
     - Czarna mgła gdy promienie z raycastingu osiagaja limit
     - Dla NextBota:
         - Render NextBota
         - A* pathfinding
     - Glowne menu
     - Muzyczka do wyboru
-    - LORE
+    - LORE (2/10)
 
 
 TODO:
@@ -18,8 +21,11 @@ TODO:
         - Generacja wyjścia/przejścia na nstępne piętro
     - NextBot enemy, w tym:
         - System przegranej (gracz zostal złapany)
+        - Glos jak idzie
+        - Stamina bota
     - System broni/strzelania w NextBota, aby można było go zestunować
     - po nacisnieciu natspuej wyjscie do Menu w tym momencie zapis i mozliwosc powrotu do tamtego stanu gry
+    - zwalic konia
 
 OPTIONAL/ASSETS:
     - Tekstury scian, ziemi, broni itp
