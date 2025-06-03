@@ -4,8 +4,11 @@ from Game.Map import Map
 
 class Player:
     def __init__(self, gamemap):
-        self.x = 12 * TILE_SIZE # 12 13 5 7
-        self.y = 13 * TILE_SIZE
+        self.start_x = 12 * TILE_SIZE
+        self.start_y = 13 * TILE_SIZE
+
+        self.x = self.start_x
+        self.y = self.start_y
         self.pos = (self.x//TILE_SIZE,self.y//TILE_SIZE)
         self.angle= -(math.pi/2)
         self.speed = 0.05
@@ -13,6 +16,16 @@ class Player:
         self.music = 1
         self.map = gamemap
 
+
+
+    def reset(self):
+        self.x = self.start_x
+        self.y = self.start_y
+        self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)
+        self.angle = -(math.pi / 2)
+        self.speed = 0.05
+        self.rotationSpeed = 0.002
+        self.music = 1
     # Na necie przeczytalem ze jak pomnozysz przez clock.tick() to wtedy masz szybkosc niezależną od fps wiec nie bedzie
     # np. roznych szybkosci na lepszych/gorszych kompach
     def move(self,keys, framerate):

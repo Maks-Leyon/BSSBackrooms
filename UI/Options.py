@@ -54,7 +54,7 @@ class Options:
 
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return "menu"
+                return "Menu"
 
         self.draw()
         return "options" # jak nic sie nie zemin to zostjamy w options

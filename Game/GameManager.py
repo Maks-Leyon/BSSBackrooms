@@ -60,6 +60,19 @@ class Game:
         pygame.mixer.Channel(1).set_volume(0.0)
         #pygame.mixer.music.play(-1)
 
+    def reset(self):
+        self.start = pygame.time.get_ticks()
+        self.game_over = False
+
+        self.player.reset()
+
+        self.enemy.reset()
+
+        Note.count = 0
+        for note in self.notes:
+            note.collected = False
+            note.open_note = False
+
     def update(self, events, fps):
 
         elapsed = pygame.time.get_ticks() - self.start # ile miliseuknd od startu

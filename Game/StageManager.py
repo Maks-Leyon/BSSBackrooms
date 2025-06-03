@@ -18,11 +18,17 @@ class StageManager:
         self.gameover = None # daje none bo z poczatku nie jest potrzebny, czyt nie zajmujemy wiecej zasobow a czasmi i tak laguje
         self.stage = "Menu"
 
+        self.need_reset = False # potrzebny przy gameover
+
     def update(self, events, clock):
         if self.stage == "Menu":
+           # print("MENU")
 
             action = self.menu.update(events)
             if action == "Start":
+                if self.need_reset:
+                    self.game.reset()
+                    self.need_reset = False
                 self.stage = "game"
             elif action == "Options":
                 self.stage = "options"
@@ -46,6 +52,8 @@ class StageManager:
         elif self.stage == "gameover":
             print("gameover")
             new_stage = self.gameover.update(events)
+            if new_stage == "Menu":
+                self.need_reset = True
             self.stage = new_stage
 
 

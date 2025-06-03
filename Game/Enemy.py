@@ -12,10 +12,17 @@ class Enemy(Entity):
         Entity.__init__(self, sprite, x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2, sprite.get_size())
         self.map = map_obj
         self.speed = 0.7
+        self.start_x = x * TILE_SIZE + TILE_SIZE // 2  # do resetu
+        self.start_y = y * TILE_SIZE + TILE_SIZE // 2 #
         self.route = []
         self.stamina = 750
         self.mix = mix
 
+    def reset(self):
+        self.x = self.start_x
+        self.y = self.start_y
+        self.stamina = 750
+        self.route = []
 
     #aktualna pozycja przceiwnika
     def current_tile(self):
