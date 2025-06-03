@@ -19,7 +19,7 @@ class Note(Entity):
 
     def draw(self, screen):
         if self.open_note:
-            #srcalpha pozwala na przezroczystosc
+            #srcalpha pozwala na przezroczystosc, gratulacje
             blak = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
             blak.fill((0, 0, 0, 180))
             screen.blit(blak, (0,0))
@@ -62,6 +62,10 @@ class Note(Entity):
     @classmethod
     def get_counter_text(cls):
         return f"Zebrane: {Note.count}/4"
+
+    @classmethod
+    def count_collected_notes(cls, notes):
+        return sum(1 for note in notes if note.collected)
 
     @classmethod
     def show_notes(cls, notes, keys, ev):

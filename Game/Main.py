@@ -6,6 +6,7 @@ from Map import Map
 from Player import Player
 from Renderer import Renderer
 from StageManager import StageManager
+from SaveAndLoad import *
 
 pygame.init()
 Renderer = Renderer(pygame)
@@ -26,6 +27,7 @@ def Main():
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
+                SaveAndLoad.saveGame(stage_manager.game)
                 running = False
         fps = clock.tick(60)
         stage_manager.update(events, fps)

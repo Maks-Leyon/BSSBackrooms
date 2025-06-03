@@ -3,6 +3,7 @@ import sys
 from GameManager import Game
 from UI.Menu import Menu
 from UI.Options import Options
+from SaveAndLoad import *
 from UI.GameOver import GameOver
 from Player import Player
 
@@ -14,29 +15,39 @@ class StageManager:
         self.map = gamemap
         self.game = Game(screen,player)
         self.options = Options(screen, player)
-      #  self.gameover = None
-        self.stage = "menu"
+        self.gameover = None # daje none bo z poczatku nie jest potrzebny, czyt nie zajmujemy wiecej zasobow a czasmi i tak laguje
+        self.stage = "Menu"
 
     def update(self, events, clock):
-        if self.stage == "menu":
+        if self.stage == "Menu":
+
             action = self.menu.update(events)
             if action == "Start":
                 self.stage = "game"
             elif action == "Options":
-
                 self.stage = "options"
+            elif action == "Load":
+                SaveAndLoad.loadGame(self.game)
+                self.stage = "game"
+
             elif action == "Exit":
+                SaveAndLoad.saveGame(self.game)
                 pygame.quit()
                 sys.exit()
 
         elif self.stage == "game":
+
             new_stage = self.game.update(events, clock)
-          #  if new_stage == "gameover":
-           #     self.gameover = GameOver(self.screen,self.game.elapsed_time)
+            if new_stage == "gameover":
+                self.gameover = GameOver(self.screen, self.game.elapsed_time)
+                self.stage = "gameover"
             self.stage = new_stage
-        #elif self.stage == "gameover":
-         #   new_stage = self.gameover.update(events)
-          #  self.stage = new_stage
+
+        elif self.stage == "gameover":
+            print("gameover")
+            new_stage = self.gameover.update(events)
+            self.stage = new_stage
+
 
 
 

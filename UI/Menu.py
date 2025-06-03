@@ -12,6 +12,7 @@ class Menu:
 
         self.buttons = [
             Button.Button((x, y, szer, wys), "Start"),Button.Button((x, y + 100,szer,wys ), "Options"),
+            Button.Button((x+280,y+300,szer,wys),"Load"),
             Button.Button((x, y + 200,szer,wys ), "Exit"),
         ]
 

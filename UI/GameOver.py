@@ -3,7 +3,7 @@ from UI import Button
 from Game.Settings import *
 
 class GameOver:
-    def __init__(self, screen,time):
+    def __init__(self, screen,elapsed_time):
         self.screen = screen
         self.font = pygame.font.SysFont(None, 60)
 
@@ -15,10 +15,10 @@ class GameOver:
         ]
 
 
-        self.time = time
-        self.min = self.time // 60000
-        self.sec = (self.time % 60000) // 1000
-        self.ms = self.time % 1000
+        self.elapsed_time = elapsed_time
+        self.min = self.elapsed_time // 60000
+        self.sec = (self.elapsed_time % 60000) // 1000
+        self.ms = self.elapsed_time % 1000
 
 
     def update(self, events):
@@ -28,7 +28,7 @@ class GameOver:
 
 
         for button in self.buttons:
-            button.update(mouse_pos) #dla kazdej pozycji sprawdzane czy myszka ni jest na guziku
+            button.update(mouse_pos)
 
 
         for event in events:
@@ -36,6 +36,7 @@ class GameOver:
                 for button in self.buttons:
                     if button.is_clicked(mouse_pos, mouse_pressed):
                         print("fueah")
+                        print(button.text)
                         return button.text
 
         for event in events:
@@ -43,16 +44,18 @@ class GameOver:
                 return "menu"
 
         self.draw()
-        return "gamover" # jak nic sie nie zemin to zostjamy w options
+        return "gameover"
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        text = self.font.render("GOAT!", True, GREEN)
-        self.screen.blit(text, (100, 100))
+        win_text = self.font.render("WYGRANA!", True, GREEN)
+        self.screen.blit(win_text, (self.screen.get_width() // 2 - win_text.get_width() // 2, 100))
 
-        time_text = f"Czas gry: {self.min:02}:{self.sec:02}:{self.ms:02}"
+        time_text = f"Czas : {self.min:02}:{self.sec:02}:{self.ms:03}"
         time_surface = self.font.render(time_text, True, WHITE)
-        self.screen.blit(time_surface, (100, 200))
+        self.screen.blit(time_surface, (self.screen.get_width() // 2 - time_surface.get_width() // 2, 200))
 
         for button in self.buttons:
             button.draw(self.screen)
+
+        pygame.display.flip()

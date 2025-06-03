@@ -32,11 +32,16 @@ class Game:
         self.note_bg = pygame.image.load("Assets/Textures/note_base.png")
 
 
-        self.notes = [
-            Note((5, 7), 'Notatka 1:\nByłem na wykładzie z Javy prowadzonym przez KKMPPNDMIMT,\ngdy usłyszałem nagle: „POPRAWKA, co to takiego?”.\n\nNagle zamigotało wszystko.\n\n Obudziłem się w labiryncie, ogromnych serwerów.\nZ czerwonymi napisami.\n\n „BSS”.\n\nZ oddali dobiegł dzwięk:\n„Panie i panowie..."\nMusiałem to sprawdzić.', self.note_bg, self.font),
-            Note((11, 12), "Notatka 2: xdxdxdxd.", self.note_bg, self.font),
-            Note((15, 9), "Notatka 3:\nZnowu onn. PCH.\n Siedzi w kącie w sweterku, obgryza długopis.\n\"Algorytm nigdy nie śpi.\"\nTo powiedział. Nikt się nie śmiał.\nWyszeptał potem:\n\"Każda pętla ma swoje przeznaczenie.\nCzy to groźba?\nNa ścianie narysował drzewo binarne.\nOno patrzyło.\"", self.note_bg, self.font),
-            Note((20, 5), "Notatka 5: Skrskr goclaw to nie resort ten bankroll jest suchy suko przeloczamu peso!", self.note_bg, self.font)
+        '''self.notes = [
+            Note((11, 12), 'Notatka 1:\nByłem na wykładzie z Javy prowadzonym przez KKMPPNDMIMT,\ngdy usłyszałem : „POPRAWKA, co to takiego?”.\n\nNagle zamigotalo wszystko.\n\n Obudzilem się w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n „BSS”.\n\nZ oddali dobiegl dzwiek:\n„Panie i panowie..."\nMusialem to sprawdzic.', self.note_bg, self.font),
+            Note((5, 7), "Notatka 2:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial cicho, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.", self.note_bg, self.font),
+            Note((15, 9), "Notatka 3:\nZnowu onn. PCH.\n Siedzi w kącie w sweterku, obgryza długopis.\n\"Algorytm nigdy nie śpi.\"\nTo powiedział. Nikt się nie śmiał.\nWyszeptał potem:\n\"Każda pętla ma swoje przeznaczenie.\nCzy to grozba?\nNa ścianie narysował drzewo binarne.\nOno patrzyło.\"", self.note_bg, self.font),
+            Note((20, 5), 'Notatka 5\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam,\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\nOn zawsze trafia.', self.note_bg, self.font)
+        ]'''
+
+        #DO TESTOW GAMEOVER
+        self.notes = [Note((11, 12), 'Notatka 1:\nByłem na wykładzie z Javy prowadzonym przez KKMPPNDMIMT,\ngdy usłyszałem : „POPRAWKA, co to takiego?”.\n\nNagle zamigotalo wszystko.\n\n Obudzilem się w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n „BSS”.\n\nZ oddali dobiegl dzwiek:\n„Panie i panowie..."\nMusialem to sprawdzic.', self.note_bg, self.font)
+
         ]
 
 
@@ -56,20 +61,22 @@ class Game:
         #pygame.mixer.music.play(-1)
 
     def update(self, events, fps):
+
         elapsed = pygame.time.get_ticks() - self.start # ile miliseuknd od startu
+        self.elapsed_time =elapsed # do zapisu
         self.min = elapsed // 60000
         self.sec = (elapsed % 60000) // 1000
         self.ms = elapsed % 1000
 
 
-
         pygame.mixer.Channel(0).set_volume(0.5)
+
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.mixer.Channel(0).set_volume(0.0)
                 for n in self.notes:
                     n.open_note = False
-                return "menu"  # tutaj trzeba bedzei ddoac zapis postepu
+                return "Menu"
         keys = pygame.key.get_pressed()
         if Note.open_notes:
             Note.show_notes(self.notes, keys, events)
@@ -78,7 +85,7 @@ class Game:
                 if n.open_note:
                     n.draw(self.screen)
             pygame.display.flip()
-            return "game"
+
 
         #essa
         for n in self.notes:
@@ -90,6 +97,7 @@ class Game:
         keys = pygame.key.get_pressed()
         self.player.move(keys, fps)
         self.enemy.update(self.player)
+
         for n in self.notes:
             n.update(self.player.pos, keys, events)
         Note.show_notes(self.notes, keys, events)
@@ -100,11 +108,13 @@ class Game:
             if music_path:
                 pygame.mixer.Channel(0).play(pygame.mixer.Sound(music_path),-1)
 
-        # TO NAPRAWIE
-       # if self.notes_class.count_collected() == len(self.notes_class.notatki):
-        #    self.game_over = True
-         #   self.elapsed_time = pygame.time.get_ticks() - self.start # chcaoielm czas przeniesc na koncowy ekran
-          #  return "gameover"
+
+        if Note.count_collected_notes(self.notes) == len(self.notes):
+            self.game_over = True
+            self.elapsed_time = pygame.time.get_ticks() - self.start
+            print("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            return "gameover"
+
 
         self.draw()
         self.draw_info()
@@ -131,6 +141,8 @@ class Game:
 
         pygame.mixer.Channel(0).play(pygame.mixer.Sound(music_file),-1)
         pygame.mixer.Channel(0).set_volume(0.5)
+
+
     def draw(self):
 
 
