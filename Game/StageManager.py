@@ -26,6 +26,7 @@ class StageManager:
 
             action = self.menu.update(events)
             if action == "Start":
+                pygame.mixer.Channel(0).set_volume(0.5)
                 if self.need_reset:
                     self.game.reset()
                     self.need_reset = False

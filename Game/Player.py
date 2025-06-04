@@ -4,19 +4,19 @@ from Game.Map import Map
 
 class Player:
     def __init__(self, gamemap):
-        self.start_x = 12 * TILE_SIZE
-        self.start_y = 13 * TILE_SIZE
+        self.start_x = 12 * TILE_SIZE + TILE_SIZE//2
+        self.start_y = 21 * TILE_SIZE + TILE_SIZE//2
 
         self.x = self.start_x
         self.y = self.start_y
         self.pos = (self.x//TILE_SIZE,self.y//TILE_SIZE)
-        self.angle= -(math.pi/2)
+        self.angle= math.pi
         self.speed = 0.05
         self.rotationSpeed = 0.002
         self.music = 1
         self.map = gamemap
-
-
+        self.hp = 3
+        self.stamina = 300
 
     def reset(self):
         self.x = self.start_x
@@ -26,6 +26,9 @@ class Player:
         self.speed = 0.05
         self.rotationSpeed = 0.002
         self.music = 1
+        self.hp = 3
+        self.stamina = 300
+
     # Na necie przeczytalem ze jak pomnozysz przez clock.tick() to wtedy masz szybkosc niezależną od fps wiec nie bedzie
     # np. roznych szybkosci na lepszych/gorszych kompach
     def move(self,keys, framerate):
@@ -35,8 +38,17 @@ class Player:
 
         #sprint
         if keys[pygame.K_LSHIFT]:
-            self.speed = 0.1
+            if self.stamina > 0:
+                self.stamina -= 0.15 * framerate
+            if self.stamina > 1:
+                self.speed = 0.11
+            else:
+                self.speed = 0.05
         else:
+            if self.stamina < 300:
+                self.stamina += 0.03 * framerate
+            else:
+                self.stamina = 300
             self.speed = 0.05
 
         if keys[pygame.K_LEFT]:
@@ -62,3 +74,9 @@ class Player:
             #print(self.y, "< - Moj x hehe")
 
         self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)
+
+    def take_damage(self):
+        self.hp -= 1
+        if self.hp <= 0:
+            return True
+        return False

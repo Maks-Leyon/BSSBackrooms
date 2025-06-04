@@ -1,27 +1,33 @@
 import pygame
 import numpy as np
 from numba.core.imputils import for_iter
+from pygame.display import update
 
 from Enemy import Enemy
+from Map import Map
 from Renderer import Renderer, floor_casting, cast_ray
 from Settings import *
 from Note import Note
 
 class Game:
     def __init__(self, screen, player):
-        self.start = pygame.time.get_ticks()
+        self.start = pygame.time.get_ticks() + 3000 # +3k zeby od 0 sie zaczynalo
         self.screen = screen
         self.player = player
         self.current_music = None
         self.map = player.map
         self.game_over = False
         self.elapsed_time = 0
+        self.level = 1
+        self.jumpscare_fadeout = 0
+        self.gg = False
 
 
         self.music_files = {
             1: "Assets/Sounds/bg_dark.mp3",
             2: "Assets/Sounds/bgsound.mp3",
-            3: "Assets/Sounds/bg_PPJ.mp3"
+            3: "Assets/Sounds/bg_PPJ.mp3",
+            4: "Assets/Sounds/asd.wav"
         }
 
         self.renderer = Renderer(pygame)
@@ -32,17 +38,12 @@ class Game:
         self.note_bg = pygame.image.load("Assets/Textures/note_base.png")
 
 
-        '''self.notes = [
-            Note((11, 12), 'Notatka 1:\nByłem na wykładzie z Javy prowadzonym przez KKMPPNDMIMT,\ngdy usłyszałem : „POPRAWKA, co to takiego?”.\n\nNagle zamigotalo wszystko.\n\n Obudzilem się w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n „BSS”.\n\nZ oddali dobiegl dzwiek:\n„Panie i panowie..."\nMusialem to sprawdzic.', self.note_bg, self.font),
-            Note((5, 7), "Notatka 2:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial cicho, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.", self.note_bg, self.font),
-            Note((15, 9), "Notatka 3:\nZnowu onn. PCH.\n Siedzi w kącie w sweterku, obgryza długopis.\n\"Algorytm nigdy nie śpi.\"\nTo powiedział. Nikt się nie śmiał.\nWyszeptał potem:\n\"Każda pętla ma swoje przeznaczenie.\nCzy to grozba?\nNa ścianie narysował drzewo binarne.\nOno patrzyło.\"", self.note_bg, self.font),
-            Note((20, 5), 'Notatka 5\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam,\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\nOn zawsze trafia.', self.note_bg, self.font)
-        ]'''
-
-        #DO TESTOW GAMEOVER
-        self.notes = [Note((11, 12), 'Notatka 1:\nByłem na wykładzie z Javy prowadzonym przez KKMPPNDMIMT,\ngdy usłyszałem : „POPRAWKA, co to takiego?”.\n\nNagle zamigotalo wszystko.\n\n Obudzilem się w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n „BSS”.\n\nZ oddali dobiegl dzwiek:\n„Panie i panowie..."\nMusialem to sprawdzic.', self.note_bg, self.font)
-
+        self.notes = [  #NOTATKI DOTYCZACE PIERWSZEGO LVL, TKZ LVL PSM ROMAN MAKS PDF
+            Note((5,6), 'Notatka 1:\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\n\nOn zawsze trafia.', self.note_bg, self.font, 1),
+            Note((19, 7), "Notatka 2:\nJego zdjecia.\nNasze zdjecia\nprzyjal moja forme\n  zabral mi twarz\n\nczuje jego wzrok\nczuje jego oddech\nczuje jego dotyk\n\nnie moze mnie zlapac. nie moze.", self.note_bg, self.font, 2),
+            Note((10, 18), "Notatka 3:\nTo nie byla prawda\ntylko fasada ukrywajaca wszystko\nwypisalem sie z PSM juz dawno temu\n\nmusialem zrobic to znowu.\nGdybym sobie przypomnial\n\nmusialem zejsc glebiej. Musialem zobaczyc prawde", self.note_bg, self.font, 3)
         ]
+
 
 
        # self.enemy_sprite = pygame.image.load("Assets/Textures/rock.png")
@@ -58,11 +59,29 @@ class Game:
         pygame.mixer.Channel(1).play(pygame.mixer.Sound("Assets/Sounds/oddychanie.wav"),-1)
         pygame.mixer.Channel(0).set_volume(0.0)
         pygame.mixer.Channel(1).set_volume(0.0)
-        #pygame.mixer.music.play(-1)
 
     def reset(self):
         self.start = pygame.time.get_ticks()
+        self.jumpscare_fadeout = 0
+
         self.game_over = False
+
+        self.level = 1
+        self.map.game_map = MAP1
+        self.enemy.x = 13 * TILE_SIZE + TILE_SIZE // 2
+        self.enemy.y = 13 * TILE_SIZE + TILE_SIZE // 2
+        Map.tiles = {}
+        self.notes = [  # NOTATKI DOTYCZACE PIERWSZEGO LVL, TKZ LVL PSM ROMAN MAKS PDF
+            Note((5, 6),
+                 'Notatka 1:\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\n\nOn zawsze trafia.',
+                 self.note_bg, self.font, 1),
+            Note((19, 7),
+                 "Notatka 2:\nJego zdjecia.\nNasze zdjecia\nprzyjal moja forme\n  zabral mi twarz\n\nczuje jego wzrok\nczuje jego oddech\nczuje jego dotyk\n\nnie moze mnie zlapac. nie moze.",
+                 self.note_bg, self.font, 2),
+            Note((10, 18),
+                 "Notatka 3:\nTo nie byla prawda\ntylko fasada ukrywajaca wszystko\nwypisalem sie z PSM juz dawno temu\n\nmusialem zrobic to znowu.\nGdybym sobie przypomnial\n\nmusialem zejsc glebiej. Musialem zobaczyc prawde",
+                 self.note_bg, self.font, 3)
+        ]
 
         self.player.reset()
 
@@ -74,6 +93,13 @@ class Game:
             note.open_note = False
 
     def update(self, events, fps):
+
+        if self.gg:
+            pygame.mixer.Channel(0).set_volume(0.0)
+            pygame.mixer.Channel(1).set_volume(0.0)
+            self.reset()
+            self.gg = False
+            return "Menu"
 
         elapsed = pygame.time.get_ticks() - self.start # ile miliseuknd od startu
         self.elapsed_time =elapsed # do zapisu
@@ -87,18 +113,19 @@ class Game:
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.mixer.Channel(0).set_volume(0.0)
+                pygame.mixer.Channel(1).set_volume(0.0)
                 for n in self.notes:
                     n.open_note = False
                 return "Menu"
+
         keys = pygame.key.get_pressed()
         if Note.open_notes:
             Note.show_notes(self.notes, keys, events)
-            #musze je rysowac bo inaczej nie dziala scrollowanie
+            # musze je rysowac bo inaczej nie dziala scrollowanie
             for n in self.notes:
                 if n.open_note:
                     n.draw(self.screen)
             pygame.display.flip()
-
 
         #essa
         for n in self.notes:
@@ -106,6 +133,19 @@ class Game:
                 keys = pygame.key.get_pressed()
                 n.update(self.player.pos, keys, events)
                 return "game"
+
+        #Jesli jest enemy blisko gracza, to:
+        if self.enemy.distance_to_player(self.player.x, self.player.y) < 40:
+            #jumpscare sound
+            pygame.mixer.Channel(2).set_volume(4)
+            pygame.mixer.Channel(2).play(pygame.mixer.Sound("Assets/Sounds/jumpsker.wav"))
+            #przsecinwik sie tepa na drugi koniec areny
+            self.enemy.teleport()
+            #gracz traci zycie i jest gg jesli ma 0
+            self.gg = self.player.take_damage()
+            # Potrzeben zeby jumpscare powoli znikal
+            self.jumpscare_fadeout = 500
+
 
         keys = pygame.key.get_pressed()
         self.player.move(keys, fps)
@@ -121,25 +161,64 @@ class Game:
             if music_path:
                 pygame.mixer.Channel(0).play(pygame.mixer.Sound(music_path),-1)
 
-
-        if Note.count_collected_notes(self.notes) == len(self.notes):
+        #przechodzenie miedzy levelami, nowa mpa,a nowe notatki i game over
+        if self.level == 1 and Note.count == 3:
+            self.update_level(2)
+        elif self.level == 2 and Note.count == 6:
+            self.update_level(3)
+        elif self.level == 3 and Note.count == 9:
             self.game_over = True
             self.elapsed_time = pygame.time.get_ticks() - self.start
             print("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            pygame.mixer.Channel(0).set_volume(0.0)
+            pygame.mixer.Channel(1).set_volume(0.0)
             return "gameover"
 
-
         self.draw()
+        #tu rysujemy jumpscare hihi
+        self.flash_jumpscare()
         self.draw_info()
         pygame.display.flip()
         return "game"
+
+    def update_level(self, lvl):
+        if lvl == 2:
+            self.level = 2
+            self.map.game_map = MAP2
+            if len(self.notes) == 3:                #NOTATKI DOTYCZACE 2 LVL, TKZW LVL TOMASZEW+PCH
+                self.notes.append(Note((11, 12), 'Notatka 4:\nPamietam.\n\nBylem na wykladzie z Javy prowadzonym przezz KKMPPNDMIMT\ngdy uslyszalem : „POPRAWKA? Co to takiego?”\n\nNagle zamigotalo wszystko.\n\nObudzilem sie w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n„BSS”', self.note_bg, self.font, 4))
+                self.notes.append(Note((3, 13), 'Notatka 5:\nZnowu onn. PCH.\nSiedzi w kacie w sweterku, obgryza dlugopis.\n"Algorytm nigdy nie spi"\nTo powiedzial. Nikt sie nie smial\nWyszeptal potem:\n"Kazda petla ma swoje przeznaczenie."\nCzy to grozba?\nNa scianie narysowal drzewo binarne.\n\nOno patrzylo.', self.note_bg, self.font, 5))
+                self.notes.append(Note((20, 11), 'Notatka 6:\nNie bylem tam sam.\nNie jestem tu sam.\n\nZe mna byl kruszyn.\n   Zkruszony na kawalki. PCH\nZe mna byl pawlik\n   Lepek rozjebany. Algebra.\n\nNie bylem tam sam.\nNie jestem tu sam.\n\nZ oddali dobiegal dzwiek:\n„Panie i panowie..."\nMusialem to sprawdzic.', self.note_bg, self.font, 6))
+            self.enemy.x = 12 * TILE_SIZE + TILE_SIZE // 2
+            self.enemy.y = 13 * TILE_SIZE + TILE_SIZE // 2
+            Map.tiles = {}
+        elif lvl == 3:
+            self.level = 3
+            self.map.game_map = MAP3
+            if len(self.notes) == 6:                #NOTATKI DOTYCZACE 3 LVL, TKZW LVL SMYK
+                self.notes.append(Note((5, 19),'Notatka 7:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial bez ruchu, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.',self.note_bg, self.font, 7))
+                self.notes.append(Note((18, 21),'Notatka 8:\nPoprawka? Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka?\nPoprawka? Co to jest poprawka? Poprawka? Co to \njest poprawka? Poprawka? Co to jest poprawka? Poprawka?\n Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? Co \nto jest poprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka? \n\n              Poprawka? Co to jest poprawka?',self.note_bg, self.font, 8))
+                self.notes.append(Note((12, 3),'Notatka 9:\nnienawidze kuby pawlika',self.note_bg, self.font, 9))
+            self.enemy.x = 12 * TILE_SIZE + TILE_SIZE // 2
+            self.enemy.y = 23 * TILE_SIZE + TILE_SIZE // 2
+            Map.tiles = {}
+        else:
+            return
+
+    # ta metodo jest po to zeby wyseiwtlic sprite wroga na ekrani jako jumpscare i powoli go zanikac
+    def flash_jumpscare(self):
+        if self.jumpscare_fadeout < 1:
+            return
+        spsurf = pygame.transform.scale(self.enemy.sprite, (WIDTH, HEIGHT)).convert_alpha()
+        spsurf.set_alpha(self.jumpscare_fadeout)
+        self.screen.blit(spsurf, (0, 0))
+        self.jumpscare_fadeout -= 10
+        pygame.display.flip()
 
     def draw_info(self):
         for n in self.notes:
             if n.open_note:
                 return
-
-
 
         text_surface = self.font.render(f"Rotation speed: {self.player.rotationSpeed:.4f}", True, WHITE)
         self.screen.blit(text_surface, (10, 10))
@@ -148,7 +227,11 @@ class Game:
 
         counter_text = Note.get_counter_text()
         counter_surf = self.font.render(counter_text,True,RED)
-        self.screen.blit(counter_surf,(HALF_WIDTH,550))
+        self.screen.blit(counter_surf,(WIDTH* 0.8,HEIGHT * 0.9))
+
+        stamina_rec = pygame.Rect(WIDTH//4, HEIGHT * 0.9, WIDTH//2, HEIGHT * 0.05)
+        stamina_rec.width = (WIDTH//2)/(300/self.player.stamina+0.0001)
+        pygame.draw.rect(self.screen,(0,0,255),stamina_rec)
 
     def change_music(self, music_file):
 
@@ -167,9 +250,6 @@ class Game:
         z_buffer = cast_ray(self.player.x, self.player.y, self.player.angle, self.map.game_map)
         self.renderer.draw_walls(self.screen, z_buffer, self.player.angle)
 
-        for n in self.notes:
-            n.draw(self.screen)
-
         entities_to_draw = [n for n in self.notes if not n.open_note and not n.collected]
         entities_to_draw.append(self.enemy)
 
@@ -184,6 +264,8 @@ class Game:
                                       self.player.x, self.player.y, self.player.angle,
                                       z_buffer, pygame)
 
+        for n in self.notes:
+            n.draw(self.screen)
         '''enemy_tile_x = self.enemy.x / TILE_SIZE
         enemy_tile_y = self.enemy.y / TILE_SIZE
         enemy_size = np.asarray(self.enemy_sprite.get_size())

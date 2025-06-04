@@ -1,8 +1,3 @@
-import math
-from typing import final
-
-import pygame
-
 from Entity import Entity
 from Map import Map
 from Settings import *
@@ -15,14 +10,16 @@ class Enemy(Entity):
         self.start_x = x * TILE_SIZE + TILE_SIZE // 2  # do resetu
         self.start_y = y * TILE_SIZE + TILE_SIZE // 2 #
         self.route = []
-        self.stamina = 750
+        self.stamina = 650
         self.mix = mix
+        self.stun_meter = 0
 
     def reset(self):
         self.x = self.start_x
         self.y = self.start_y
-        self.stamina = 750
+        self.stamina = 650
         self.route = []
+        self.stun_meter = 0
 
     #aktualna pozycja przceiwnika
     def current_tile(self):
@@ -58,6 +55,7 @@ class Enemy(Entity):
 
             if current_tile == target_tile: #jesli to jest nasz target to resetujemy wszystkie tile i zwracamy sciezke
                 route = current_tile.get_path(start_tile)
+                route.append(start_tile)
                 for tile in opent:
                     tile.cost = 0
                     tile.path = None
@@ -80,6 +78,17 @@ class Enemy(Entity):
                     if tile not in opent:
                         opent.append(tile)
 
+    def teleport(self):
+        ct = Map.get_tile(self.current_tile())
+        if ct.x < 10:
+            self.x = 23 * TILE_SIZE + TILE_SIZE // 2
+        else:
+            self.x = 1 * TILE_SIZE + TILE_SIZE // 2
+        if ct.y < 10:
+            self.y = 23 * TILE_SIZE + TILE_SIZE // 2
+        else:
+            self.y = 1 * TILE_SIZE + TILE_SIZE // 2
+
     def update(self, player):
         player_tile = (int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) #pozycja gracza caly czas zeby mogl skedzic jak chciales
         current = self.current_tile() # aktual pozycja przeciwnika
@@ -88,23 +97,26 @@ class Enemy(Entity):
         #distance to odleglosc od gracza euklidesowa ORAZ ilosc kafelkow * 10 zeby gracz nie robil kiwki
         distance = Entity.distance_to_player(self, player.x, player.y) + 10*len(self.route)
 
-        sound = 1/max(1, distance / 7)
+        sound = 1/max(1, distance / 6)
+        if len(self.route) > 6 or distance >= 390:
+            sound = 0
         self.mix.Channel(1).set_volume(sound)
 
         #bieg enemy
+        speedmod = 0.7 # tylko to updatuj jesl ichcesz zmieniac szybkosc, obecnie 70%
         if distance < 310:
             if self.stamina > 1:
                 self.stamina -= 2
-                self.speed = 1.05 + (self.stamina / 1000)
+                self.speed = (0.95 + (self.stamina / 900)) * speedmod
             else:
-                self.speed = 0.78
+                self.speed = 0.75 * speedmod
         elif distance < 700:
             if distance > 340:
-                self.stamina = self.stamina + (1 if self.stamina < 750 else 0)
-            self.speed = 0.72
+                self.stamina = self.stamina + (1 if self.stamina < 650 else 0)
+            self.speed = 0.72 * speedmod
         else:
-            self.stamina = 900
-            self.speed = 1.8
+            self.stamina = 800
+            self.speed = 1.8 * speedmod
 
         if current != player_tile and any(self.route) and len(self.route) > 0: #czy sciezka jest wgl
             next_tile = self.route[0] # bierze nastepny kafel no i ogolnie [0] bo jak dochodzi do kafla no to juz ogarnia nastepny es

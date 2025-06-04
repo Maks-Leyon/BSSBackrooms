@@ -1,7 +1,7 @@
 import pygame
 
 
-from Game.Settings import HALF_HEIGHT, HALF_WIDTH, WHITE
+from Game.Settings import HALF_HEIGHT, HALF_WIDTH, WHITE, WIDTH
 from UI.Button import Button
 from UI.Slider import Slider
 from Game import Settings
@@ -18,9 +18,10 @@ class Options:
         initial_val = max(min((player.rotationSpeed - min_speed) / (max_speed - min_speed), 1), 0)
         self.slider = Slider(HALF_WIDTH, HALF_HEIGHT, (500,30), initial_val, min_speed, max_speed)
 
-        self.buttons = [ Button((88,400,150,50), "Creepy"),
-                         Button( (325,400,160,50), "Przyjaciele"),
-                         Button((563,400,150,50), "Femboye")]
+        self.buttons = [ Button((WIDTH * 0.1,400,WIDTH * 0.15,50), "Creepy"),
+                         Button( (WIDTH * 0.3,400,WIDTH * 0.15,50), "Przyjaciele"),
+                         Button((WIDTH * 0.5,400,WIDTH * 0.15,50), "Femboye"),
+                         Button((WIDTH * 0.7,400,WIDTH * 0.15,50), "ASD")]
 
     #USELSS XDDDDDDDDDDDDDDDDDDDDDD
     def creepZursynowa(self):

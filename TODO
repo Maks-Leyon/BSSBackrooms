@@ -5,27 +5,27 @@ Zrobione:
     ** Znajdźki na mapie, w tym:
         - Karteczki
         - Menu karteczek
+        - Generacja wyjścia/przejścia na nstępne piętro
     - Czarna mgła gdy promienie z raycastingu osiagaja limit
     - Dla NextBota:
         - Render NextBota
         - A* pathfinding
+        - Glos jak idzie
+        - Stamina bota
+        - System przegranej (gracz zostal złapany)
     - Glowne menu
     - Muzyczka do wyboru
-    - LORE (2/10)
+    - po nacisnieciu natspuej wyjscie do Menu w tym momencie zapis i mozliwosc powrotu do tamtego stanu gry
+    - LORE (8/10)
 
 
 TODO:
     ** Znajdźki na mapie, w tym:
         - Jakiś sposób na odzyskiwanie życia, zwiększanie szybkości
         - Sposób na zdobycie broni/amunicji
-        - Generacja wyjścia/przejścia na nstępne piętro
-    - NextBot enemy, w tym:
-        - System przegranej (gracz zostal złapany)
-        - Glos jak idzie
-        - Stamina bota
-    - System broni/strzelania w NextBota, aby można było go zestunować
-    - po nacisnieciu natspuej wyjscie do Menu w tym momencie zapis i mozliwosc powrotu do tamtego stanu gry
-    - zwalic konia
+    - Dla NextBota:
+        - INNY SPRITE I DZWIEK DLA KAZDEGO PIETRA (TOMASZEW dla 2, SMYK dla 3)
+    - System broni/strzelania w NextBota, aby można było go zestunować (FORK BOMBA)
 
 OPTIONAL/ASSETS:
     - Tekstury scian, ziemi, broni itp

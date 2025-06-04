@@ -113,7 +113,7 @@ class Renderer:
         if dist < MAX_DEPTH:
 
             #Wielkosc sprite'a zaleznie od odleglosci - 500 to losowa liczba ktora dalem
-            proj_height = (TILE_SIZE / dist) * 500
+            proj_height = (TILE_SIZE / (dist+0.0001)) * 500
             max_proj_height = HEIGHT * 2
             proj_height = min(proj_height, max_proj_height)
             #Jego szerokosc proporcjonalna do texkstury

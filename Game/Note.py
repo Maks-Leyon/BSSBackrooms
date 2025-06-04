@@ -8,11 +8,12 @@ class Note(Entity):
     open_notes = False
     note_index = 0
     notes_to_show = []
-    def __init__(self,pos,note,sprite,font):
+    def __init__(self,pos,note,sprite,font,no):
         Entity.__init__(self,sprite,pos[0]* TILE_SIZE + TILE_SIZE // 2,pos[1]* TILE_SIZE + TILE_SIZE // 2,sprite.get_size())
         self.font = font
         self.pos = pos
         self.note = note
+        self.no = no
         self.collected = False
         self.open_note = False
 
