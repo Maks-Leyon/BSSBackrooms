@@ -99,7 +99,7 @@ class Game:
             pygame.mixer.Channel(1).set_volume(0.0)
             self.reset()
             self.gg = False
-            return "Menu"
+            return "gameLose"
 
         elapsed = pygame.time.get_ticks() - self.start # ile miliseuknd od startu
         self.elapsed_time =elapsed # do zapisu
@@ -117,6 +117,12 @@ class Game:
                 for n in self.notes:
                     n.open_note = False
                 return "Menu"
+
+            ##
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                return "gameLose"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                return "gameover"
 
         keys = pygame.key.get_pressed()
         if Note.open_notes:

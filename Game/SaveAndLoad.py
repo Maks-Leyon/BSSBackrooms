@@ -53,3 +53,19 @@ class SaveAndLoad:
         with open(file, "a") as f:
             f.write(f"{nick} {elapsed_time}\n")
 
+    @staticmethod
+    def loadInfo(file="Assets/SaveFiles/saveinfo.txt"):
+        players = []
+        with open(file, "r") as f:
+            lines =f.readlines()
+        for line in lines:
+            part = line.strip().split()
+            nick = part[0]
+            time = int(part[1])
+            players.append((nick,time))
+
+        players.sort(key=lambda x : x[1]) #domyslnie sortuje rosnaco
+
+        return players[:5] #narazie tylko 5 mozna zwiekszyc
+
+

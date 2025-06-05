@@ -18,10 +18,12 @@ class Options:
         initial_val = max(min((player.rotationSpeed - min_speed) / (max_speed - min_speed), 1), 0)
         self.slider = Slider(HALF_WIDTH, HALF_HEIGHT, (500,30), initial_val, min_speed, max_speed)
 
-        self.buttons = [ Button((WIDTH * 0.1,400,WIDTH * 0.15,50), "Creepy"),
-                         Button( (WIDTH * 0.3,400,WIDTH * 0.15,50), "Przyjaciele"),
-                         Button((WIDTH * 0.5,400,WIDTH * 0.15,50), "Femboye"),
-                         Button((WIDTH * 0.7,400,WIDTH * 0.15,50), "ASD")]
+        self.buttons = [ Button((WIDTH * 0.1,320,WIDTH * 0.15,50), "Creepy"),
+                         Button( (WIDTH * 0.3,320,WIDTH * 0.15,50), "Przyjaciele"),
+                         Button((WIDTH * 0.5,320,WIDTH * 0.15,50), "Femboye"),
+                         Button((WIDTH * 0.7,320,WIDTH * 0.15,50), "ASD"),
+                         Button((WIDTH * 0.4, 450, WIDTH * 0.2, 50), "How to Play")
+                         ]
 
     #USELSS XDDDDDDDDDDDDDDDDDDDDDD
     def creepZursynowa(self):
@@ -50,6 +52,8 @@ class Options:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: #jednorazowo za kazda proba klikniecia
                 for button in self.buttons:
                     if button.is_clicked(mouse_pos, mouse_pressed):
+                        if button.text == "How to Play":
+                            return "how_to_play"
                         print("fueah")
                         return button.text
 
@@ -66,7 +70,7 @@ class Options:
         label2 = self.font.render("Muzyka w grze", True, WHITE)
         self.screen.fill((0, 0, 0))
         self.screen.blit(label,(250,80))
-        self.screen.blit(label2, (250,320))
+        self.screen.blit(label2, (250,250))
 
         self.slider.render(self.screen)
         for button in self.buttons:

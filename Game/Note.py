@@ -8,6 +8,7 @@ class Note(Entity):
     open_notes = False
     note_index = 0
     notes_to_show = []
+    total_notes = 0 # zmienna do get _couner
     def __init__(self,pos,note,sprite,font,no):
         Entity.__init__(self,sprite,pos[0]* TILE_SIZE + TILE_SIZE // 2,pos[1]* TILE_SIZE + TILE_SIZE // 2,sprite.get_size())
         self.font = font
@@ -16,6 +17,7 @@ class Note(Entity):
         self.no = no
         self.collected = False
         self.open_note = False
+        Note.total_notes +=1
 
 
     def draw(self, screen):
@@ -62,7 +64,7 @@ class Note(Entity):
         #dodatkowa by wyswietlac na ekranie liczbe aktualnie zebranyuch, taki getter
     @classmethod
     def get_counter_text(cls):
-        return f"Zebrane: {Note.count}/4"
+        return f"Zebrane: {Note.count}/{Note.total_notes}"
 
     @classmethod
     def count_collected_notes(cls, notes):

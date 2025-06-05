@@ -5,6 +5,9 @@ from UI.Menu import Menu
 from UI.Options import Options
 from SaveAndLoad import *
 from UI.GameOver import GameOver
+from UI.HowToPlay import HowToPlay
+from UI.GameStart import GameStart
+from UI.Ranking import Ranking
 from Player import Player
 
 class StageManager:
@@ -15,12 +18,16 @@ class StageManager:
         self.map = gamemap
         self.game = Game(screen,player)
         self.options = Options(screen, player)
+        self.how_to_play = HowToPlay(screen)
+        self.game_start = GameStart(screen)
+        self.ranking = Ranking(screen)
         self.gameover = None # daje none bo z poczatku nie jest potrzebny, czyt nie zajmujemy wiecej zasobow a czasmi i tak laguje
         self.stage = "Menu"
+        self.gg = False
 
         self.need_reset = False # potrzebny przy gameover
 
-    def update(self, events, clock):
+    '''def update(self, events, clock):
         if self.stage == "Menu":
            # print("MENU")
 
@@ -30,7 +37,7 @@ class StageManager:
                 if self.need_reset:
                     self.game.reset()
                     self.need_reset = False
-                self.stage = "game"
+                self.stage = "game_start"
             elif action == "Options":
                 self.stage = "options"
             elif action == "Load":
@@ -62,6 +69,8 @@ class StageManager:
 
         elif self.stage == "options":
             result = self.options.update(events)  # result to np. "Creepy", "Szczescie", "Gorycz", "menu" lub "options"
+            if result == "how_to_play":
+                self.stage = "how_to_play"
 
 
             if result == "Creepy":
@@ -73,7 +82,96 @@ class StageManager:
             elif result == "Femboye":
                 self.player.music = 3
                 self.stage = "options"
+            elif result == "ASD":
+                self.player.music = 4
+                self.stage = "options"
             elif result == "menu":
                 self.stage = "menu"
             else:
                 self.stage = result
+
+        elif self.stage == "how_to_play":
+            res = self.how_to_play.update(events)
+            if res == "options":
+                self.stage = "options"'''
+
+    def update(self, events, clock):
+        if self.stage == "Menu":
+            action = self.menu.update(events)
+            if action == "Start":
+                self.stage = "game_start"  # Przechodzimy do ekranu GameStart
+            elif action == "Options":
+                self.stage = "options"
+            elif action == "Exit":
+                pygame.quit()
+                sys.exit()
+
+        elif self.stage == "game_start":
+            action = self.game_start.update(events)
+            if action == "Load":
+                SaveAndLoad.loadGame(self.game)
+                self.stage = "game"
+            elif action == "Start":
+                pygame.mixer.Channel(0).set_volume(0.5)
+                if self.need_reset:
+                    self.game.reset()
+                    self.need_reset = False
+                self.stage = "game"
+            elif action == "Reset":
+                self.game.reset()
+                self.need_reset = False
+            elif action == "Menu":
+                self.stage = "Menu"
+            elif action == "ranking":
+                self.stage = "ranking"
+            elif action == "Back":
+                self.stage = "Menu"
+
+        elif self.stage == "game":
+            new_stage = self.game.update(events, clock)
+            if new_stage == "gameover":
+                self.gameover = GameOver(self.screen, self.game.elapsed_time,True)
+                self.stage = "gameover"
+            elif new_stage == "gameLose":
+                self.gameover = GameOver(self.screen, self.game.elapsed_time, False)
+                self.stage = "gameover"
+            self.stage = new_stage
+
+        elif self.stage == "gameover":
+            print("gameover")
+            new_stage = self.gameover.update(events)
+            if new_stage == "Menu":
+                self.need_reset = True  # Potrzebujemy resetu, aby zacząć nową grę
+            self.stage = new_stage
+
+        elif self.stage == "options":
+            result = self.options.update(events)
+            if result == "how_to_play":
+                self.stage = "how_to_play"
+
+            if result == "Creepy":
+                self.player.music = 1
+                self.stage = "options"
+            elif result == "Przyjaciele":
+                self.player.music = 2
+                self.stage = "options"
+            elif result == "Femboye":
+                self.player.music = 3
+                self.stage = "options"
+            elif result == "ASD":
+                self.player.music = 4
+                self.stage = "options"
+            elif result == "menu":
+                self.stage = "menu"
+            else:
+                self.stage = result
+
+        elif self.stage == "how_to_play":
+            res = self.how_to_play.update(events)
+            if res == "Back":
+                self.stage = "options"
+
+        elif self.stage == "ranking":
+            res = self.ranking.update(events)
+            if res == "Back":
+                self.stage = "game_start"

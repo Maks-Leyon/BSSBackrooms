@@ -1,30 +1,33 @@
 import pygame
 
-from Game.Settings import WHITE,RED
+from Game.Settings import *
 from UI.Button import Button
-from Game import Settings
 
-class Menu:
+class GameStart:
     def __init__(self, screen):
         self.screen = screen
         self.szer, self.wys = 250, 60
-        self.x = self.screen.get_width() // 2 - self.szer // 2  # Wyśrodkowanie buttonow
-        self.y = self.screen.get_height() // 4
+        self.x = self.screen.get_width() // 2 - self.szer // 2
+        self.y = 200
 
-        self.back = pygame.image.load("Assets/Textures/pjatkKoniec.png")
+        self.font = pygame.font.SysFont(None, 60)
+
+        self.back = pygame.image.load("Assets/Textures/starGame.png")
         self.back = pygame.transform.scale(self.back, (self.screen.get_width(), self.screen.get_height()))
 
         self.buttons = [
             Button((self.x, self.y, self.szer, self.wys), "Start"),
-            Button((self.x, self.y + 100, self.szer, self.wys), "Options"),
-            Button((self.x, self.y + 200, self.szer, self.wys), "Exit")
+            Button((self.x, self.y + 100, self.szer, self.wys), "Load"),
+            Button((self.x, self.y + 200, self.szer, self.wys), "Reset"),
+            Button((self.x + 65, self.y + 300, 120, 50), "ranking"),
+            Button((self.x - 265 , self.y + 340, 120, 50), "Back")
         ]
-
-        self.font = pygame.font.SysFont("Assets/Fonts/AlumniSansSC-Italic.ttf", 60)
 
     def update(self, events):
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
+
+
 
 
         for button in self.buttons:
@@ -32,21 +35,24 @@ class Menu:
 
 
         for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: #jednorazowo za kazda proba klikniecia
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "Menu"
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 for button in self.buttons:
                     if button.is_clicked(mouse_pos, mouse_pressed):
                         return button.text
 
+
+
         self.draw()
-        return None
+        return "game_start"
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.back, (0,0))
-        title_surf = self.font.render("BSS Backrooms", True, WHITE)
-        authors = self.font.render("By Stulejon&MikseGame04",True,RED)
+        offset = 200
+        self.screen.blit(self.back, (offset, 0))
+        title_surf = self.font.render("GRAJ", True, WHITE)
         self.screen.blit(title_surf, (self.screen.get_width() // 2 - title_surf.get_width() // 2, 100))
-
         for button in self.buttons:
             button.draw(self.screen)
 
