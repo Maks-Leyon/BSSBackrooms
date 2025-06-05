@@ -8,6 +8,7 @@ from UI.GameOver import GameOver
 from UI.HowToPlay import HowToPlay
 from UI.GameStart import GameStart
 from UI.Ranking import Ranking
+from UI.RealGameOver import RealGameOver
 from Player import Player
 
 class StageManager:
@@ -22,6 +23,7 @@ class StageManager:
         self.game_start = GameStart(screen)
         self.ranking = Ranking(screen)
         self.gameover = None # daje none bo z poczatku nie jest potrzebny, czyt nie zajmujemy wiecej zasobow a czasmi i tak laguje
+        self.gameLose = None
         self.stage = "Menu"
         self.gg = False
 
@@ -130,21 +132,26 @@ class StageManager:
         elif self.stage == "game":
             new_stage = self.game.update(events, clock)
             if new_stage == "gameover":
-                print("win")
-                self.gameover = GameOver(self.screen, self.game.elapsed_time,True)
+
+                self.gameover = GameOver(self.screen, self.game.elapsed_time)
                 self.stage = "gameover"
             elif new_stage == "gameLose":
-                print("lose")
-                self.gameover = GameOver(self.screen, self.game.elapsed_time, False)
-                self.stage = "gameover"
+
+                self.gameLose = RealGameOver(self.screen, self.game.elapsed_time)
+                self.stage = "gameLose"
+
             self.stage = new_stage
 
         elif self.stage == "gameover":
-            print("klose")
-            print("gameover")
             new_stage = self.gameover.update(events)
             if new_stage == "Menu":
                 self.need_reset = True  # Potrzebujemy resetu, aby zacząć nową grę
+            self.stage = new_stage
+
+        elif self.stage == "gameLose":
+            new_stage = self.gameLose.update(events)
+            if new_stage == "Menu":
+                self.need_reset = True
             self.stage = new_stage
 
         elif self.stage == "options":

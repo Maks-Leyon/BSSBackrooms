@@ -13,7 +13,20 @@ class Button:
         self.cursor_on_button = False # sprawdzam czy "falga" jset na guziku
 
 
+        #bez bg
+        self.color = BLACK
+        self.text_color1 = BLACK
+        self.font1 = pygame.font.Font("Assets/Fonts/messy.ttf", 40)
+        self.text_surface = self.font1.render(self.text, True, self.color)
+        self.text_rect = self.text_surface.get_rect(center=self.rect.center)
+        self.text_surface1 = self.font1.render(self.text, True,
+                                             self.text_color1)
+        self.text_rect1 = self.text_surface1.get_rect(center=self.rect.center)
+
+
+
         self.text_surface = self.font.render(self.text,True,self.text_color) #font.rect by zmienic tekst na obrazek by wstawic go w guzik
+
         self.text_rect = self.text_surface.get_rect(center=self.rect.center) #wywoluje get rect i ustawiam teskt na srodku
 
     def draw(self,surface):
@@ -21,6 +34,10 @@ class Button:
         color = self.color_if_ON if self.cursor_on_button else self.color_if_not
         pygame.draw.rect(surface,color,self.rect)
         surface.blit(self.text_surface,self.text_rect)
+
+
+    def drawWithouBG(self,screen):
+        screen.blit(self.text_surface1, self.text_rect1)
 
     def update(self,mouse_positon): # do kordow
         self.cursor_on_button = self.rect.collidepoint(mouse_positon) #collidepotin - wywolujemy na rect metode ktora sprawdza czy wspolrzene miescza sie wewntarz self.rect jesli tak to zwraca True

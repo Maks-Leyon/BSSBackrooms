@@ -3,10 +3,12 @@ from UI import Button
 from Game.Settings import *
 from Game.SaveAndLoad import *
 
-class GameOver:
+class RealGameOver:
     def __init__(self, screen,elapsed_time):
 
         self.screen = screen
+
+
 
         self.note_bg = pygame.image.load("Assets/Textures/note_base.png") # fake notatka
         self.font = pygame.font.Font("Assets/Fonts/messy.ttf", 30)
@@ -16,12 +18,10 @@ class GameOver:
         x = screen.get_width() // 2 - 130
         y = 100
         self.buttons = [
-            Button.Button((x, y + 300, szer, wys), "Potwierdzam")
+            Button.Button((x, y + 300, szer, wys), "Menu")
         ]
 
-        self.input_text = ""
 
-        self.input_rect = pygame.Rect(self.screen.get_width() // 2 - 150, 300, 300, 50)
 
         self.elapsed_time = elapsed_time
         self.min = self.elapsed_time // 60000
@@ -30,54 +30,37 @@ class GameOver:
 
 
     def update(self, events):
-
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
 
-
-
         for button in self.buttons:
             button.update(mouse_pos)
-
-
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: #jednorazowo za kazda proba klikniecia
 
-
-
                 for button in self.buttons:
                     if button.is_clicked(mouse_pos, mouse_pressed):
-                        print("fueah")
                         print(button.text)
-                        if button.text == "Potwierdzam":
-                            SaveAndLoad.saveInfo(self.input_text, self.elapsed_time)
-                            return "Menu"
+                        return button.text
+
 
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     return "Menu"
 
-                if event.key == pygame.K_BACKSPACE:
-                    self.input_text = self.input_text[:-1]
-                    '''elif event.key == pygame.K_RETURN:
-                    SaveAndLoad.saveInfo(self.input_text,self.elapsed_time)
-                    print(f"{self.input_text}")
-                    return "Menu"'''
-                else:
-                     if len(self.input_text) < 15:
-                         self.input_text += event.unicode
+
 
         self.draw()
 
-        return "gameover"
+        return "gameLose"
 
     def draw(self):
         self.screen.fill((0, 0, 0))
 
         note_bg_scaled = pygame.transform.scale(self.note_bg, (self.screen.get_width(), self.screen.get_height()))
         self.screen.blit(note_bg_scaled, (0, 0))
-        end_history_text = "W koncu sie udalo…\nPomogli mi. Ucieklem, znalazlem sie wsrod nich.\nWydaje sie, ze wszystko jest juz zakonczone.\nJednakze oni nadal czegos odemnie chca.\nNadal maja prosbe.\n\nProsze, podaj swoje Imie:"
+        end_history_text = "Nie udalo sie...\nUcieczka zawiodla, a oni nadal mnie scigaja.\nMuszr wrociv i dokonczyc to, co zaczalem.\n To jeszcze nie koniec.\n\nCzeka mnie kolejna proba."
         def draw_multiline_text(screen, text, x, y, font, color):
             lines = text.split("\n")
             line_height = font.get_height()
@@ -88,8 +71,6 @@ class GameOver:
 
 
 
-        txt_surface = self.font.render(self.input_text, True, RED)
-        self.screen.blit(txt_surface, (self.input_rect.x + 220, self.input_rect.y + 15))
 
         for button in self.buttons:
             button.drawWithouBG(self.screen)

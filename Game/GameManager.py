@@ -65,6 +65,8 @@ class Game:
 
     def reset(self):
         self.start = None
+        pygame.mixer.Channel(0).stop() # niewiemc zemu sie nie zatrzymuje
+        pygame.mixer.Channel(1).stop()
         self.min = 0
         self.sec = 0
         self.ms = 0
@@ -115,10 +117,10 @@ class Game:
         if self.start is not None:
 
             elapsed = pygame.time.get_ticks() - self.start
-            self.elapsed_time = elapsed / 1000
-            self.min = int(self.elapsed_time // 60)
-            self.sec = int(self.elapsed_time % 60)
-            self.ms = int((self.elapsed_time * 1000) % 1000)
+            self.elapsed_time = elapsed
+            self.min = int(self.elapsed_time // 60000)
+            self.sec = int((self.elapsed_time % 60000) // 1000)
+            self.ms = int(self.elapsed_time % 1000)
 
         if self.gg:
             pygame.mixer.Channel(0).set_volume(0.0)
@@ -144,6 +146,7 @@ class Game:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 return "gameLose"
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                print(self.elapsed_time)
                 return "gameover"
 
         keys = pygame.key.get_pressed()
@@ -197,6 +200,7 @@ class Game:
         elif self.level == 3 and Note.count == 9:
             self.game_over = True
             self.elapsed_time = pygame.time.get_ticks() - self.start
+            print(self.elapsed_time)
             print("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             pygame.mixer.Channel(0).set_volume(0.0)
             pygame.mixer.Channel(1).set_volume(0.0)
@@ -216,7 +220,7 @@ class Game:
             if len(self.notes) == 3:                #NOTATKI DOTYCZACE 2 LVL, TKZW LVL TOMASZEW+PCH
                 self.notes.append(Note((11, 12), 'Notatka 4:\nPamietam.\n\nBylem na wykladzie z Javy prowadzonym przezz KKMPPNDMIMT\ngdy uslyszalem : „POPRAWKA? Co to takiego?”\n\nNagle zamigotalo wszystko.\n\nObudzilem sie w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n„BSS”', self.note_bg, self.font, 4))
                 self.notes.append(Note((3, 13), 'Notatka 5:\nZnowu onn. PCH.\nSiedzi w kacie w sweterku, obgryza dlugopis.\n"Algorytm nigdy nie spi"\nTo powiedzial. Nikt sie nie smial\nWyszeptal potem:\n"Kazda petla ma swoje przeznaczenie."\nCzy to grozba?\nNa scianie narysowal drzewo binarne.\n\nOno patrzylo.', self.note_bg, self.font, 5))
-                self.notes.append(Note((20, 11), 'Notatka 6:\nNie bylem tam sam.\nNie jestem tu sam.\n\nZe mna byl kruszyn.\n   Zkruszony na kawalki. PCH\nZe mna byl pawlik\n   Lepek rozjebany. Algebra.\n\nNie bylem tam sam.\nNie jestem tu sam.\n\nZ oddali dobiegal dzwiek:\n„Panie i panowie..."\nMusialem to sprawdzic.', self.note_bg, self.font, 6))
+                self.notes.append(Note((20, 11), 'Notatka 6:\nPoprawka? Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka?\nPoprawka? Co to jest poprawka? Poprawka? Co to \njest poprawka? Poprawka? Co to jest poprawka? Poprawka?\n Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka?', self.note_bg, self.font, 6))
             self.enemy.x = 12 * TILE_SIZE + TILE_SIZE // 2
             self.enemy.y = 13 * TILE_SIZE + TILE_SIZE // 2
             Map.tiles = {}
@@ -225,8 +229,8 @@ class Game:
             self.map.game_map = MAP3
             if len(self.notes) == 6:                #NOTATKI DOTYCZACE 3 LVL, TKZW LVL SMYK
                 self.notes.append(Note((5, 19),'Notatka 7:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial bez ruchu, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.',self.note_bg, self.font, 7))
-                self.notes.append(Note((18, 21),'Notatka 8:\nPoprawka? Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka?\nPoprawka? Co to jest poprawka? Poprawka? Co to \njest poprawka? Poprawka? Co to jest poprawka? Poprawka?\n Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? Co \nto jest poprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka? \n\n              Poprawka? Co to jest poprawka?',self.note_bg, self.font, 8))
-                self.notes.append(Note((12, 3),'Notatka 9:\nnienawidze kuby pawlika',self.note_bg, self.font, 9))
+                self.notes.append(Note((18, 21),'Notatka 8:\nNie jestem tu sam.\n z oddali słyszę znane słowa.\n"Panie i Panowie".\nMam nadzieje ze to niemozliwe.\nSłabo mi na samą myśl.\n\nMuszę to sprawdzić.',self.note_bg, self.font, 8))
+                self.notes.append(Note((12, 3),'Notatka 9:\nSzukają mnie.\nWiedzą,że tu jestem, a ja niewiem nawet ile dni tu spędziłem.\nWidzę ich.\nBrunet z lokami,dosyć dziwny.\nNiejaki "Stulejon" dość dociekliwie rozglądający sie po labiryncie\nOni są moim jedynym ratunkiem',self.note_bg, self.font, 9))
             self.enemy.x = 12 * TILE_SIZE + TILE_SIZE // 2
             self.enemy.y = 23 * TILE_SIZE + TILE_SIZE // 2
             Map.tiles = {}
@@ -294,23 +298,3 @@ class Game:
 
         for n in self.notes:
             n.draw(self.screen)
-        '''enemy_tile_x = self.enemy.x / TILE_SIZE
-        enemy_tile_y = self.enemy.y / TILE_SIZE
-        enemy_size = np.asarray(self.enemy_sprite.get_size())
-
-
-
-        self.renderer.draw_sprite(self.screen, self.enemy_sprite,
-                                  enemy_tile_x, enemy_tile_y,
-                                  enemy_size,
-                                  self.player.x, self.player.y, self.player.angle,
-                                  z_buffer, pygame)
-
-        for note in self.notes:
-            if note.open_note or note.collected:
-                continue
-            self.renderer.draw_sprite(self.screen, note.sprite,
-                                      note.pos[0]+0.5, note.pos[1]+0.5,
-                                      note.sprite.get_size(),
-                                      self.player.x, self.player.y, self.player.angle,
-                                      z_buffer, pygame)'''
