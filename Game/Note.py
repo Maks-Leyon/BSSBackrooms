@@ -19,6 +19,9 @@ class Note(Entity):
         self.open_note = False
         Note.total_notes +=1
 
+    '''def reset(self):
+        Note.total_notes = 0'''
+
 
     def draw(self, screen):
         if self.open_note:

@@ -13,6 +13,7 @@ class Enemy(Entity):
         self.stamina = 650
         self.mix = mix
         self.stun_meter = 0
+        self.start_chase =  False #dopki gracz sie nie ruszy on tez nie
 
     def reset(self):
         self.x = self.start_x
@@ -90,53 +91,54 @@ class Enemy(Entity):
             self.y = 1 * TILE_SIZE + TILE_SIZE // 2
 
     def update(self, player):
-        player_tile = (int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) #pozycja gracza caly czas zeby mogl skedzic jak chciales
-        current = self.current_tile() # aktual pozycja przeciwnika
-        self.route = self.astar(player.pos)  # sciezka hell yeah baby
+        if self.start_chase:
+            player_tile = (int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) #pozycja gracza caly czas zeby mogl skedzic jak chciales
+            current = self.current_tile() # aktual pozycja przeciwnika
+            self.route = self.astar(player.pos)  # sciezka hell yeah baby
 
-        #distance to odleglosc od gracza euklidesowa ORAZ ilosc kafelkow * 10 zeby gracz nie robil kiwki
-        distance = Entity.distance_to_player(self, player.x, player.y) + 10*len(self.route)
+            #distance to odleglosc od gracza euklidesowa ORAZ ilosc kafelkow * 10 zeby gracz nie robil kiwki
+            distance = Entity.distance_to_player(self, player.x, player.y) + 10*len(self.route)
 
-        sound = 1/max(1, distance / 6)
-        if len(self.route) > 6 or distance >= 390:
-            sound = 0
-        self.mix.Channel(1).set_volume(sound)
+            sound = 1/max(1, distance / 6)
+            if len(self.route) > 6 or distance >= 390:
+                sound = 0
+            self.mix.Channel(1).set_volume(sound)
 
-        #bieg enemy
-        speedmod = 0.7 # tylko to updatuj jesl ichcesz zmieniac szybkosc, obecnie 70%
-        if distance < 310:
-            if self.stamina > 1:
-                self.stamina -= 2
-                self.speed = (0.95 + (self.stamina / 900)) * speedmod
+            #bieg enemy
+            speedmod = 0.7 # tylko to updatuj jesl ichcesz zmieniac szybkosc, obecnie 70%
+            if distance < 310:
+                if self.stamina > 1:
+                    self.stamina -= 2
+                    self.speed = (0.95 + (self.stamina / 900)) * speedmod
+                else:
+                    self.speed = 0.75 * speedmod
+            elif distance < 700:
+                if distance > 340:
+                    self.stamina = self.stamina + (1 if self.stamina < 650 else 0)
+                self.speed = 0.72 * speedmod
             else:
-                self.speed = 0.75 * speedmod
-        elif distance < 700:
-            if distance > 340:
-                self.stamina = self.stamina + (1 if self.stamina < 650 else 0)
-            self.speed = 0.72 * speedmod
-        else:
-            self.stamina = 800
-            self.speed = 1.8 * speedmod
+                self.stamina = 800
+                self.speed = 1.8 * speedmod
 
-        if current != player_tile and any(self.route) and len(self.route) > 0: #czy sciezka jest wgl
-            next_tile = self.route[0] # bierze nastepny kafel no i ogolnie [0] bo jak dochodzi do kafla no to juz ogarnia nastepny es
-            target_x, target_y = next_tile.center # jego srodek
+            if current != player_tile and any(self.route) and len(self.route) > 0: #czy sciezka jest wgl
+                next_tile = self.route[0] # bierze nastepny kafel no i ogolnie [0] bo jak dochodzi do kafla no to juz ogarnia nastepny es
+                target_x, target_y = next_tile.center # jego srodek
 
-            #zmiana we wspolrzednych
-            dx = target_x - self.x
-            dy = target_y - self.y
+                #zmiana we wspolrzednych
+                dx = target_x - self.x
+                dy = target_y - self.y
 
-            dist = math.hypot(dx, dy)
-            if dist < self.speed:
-                self.x = target_x
-                self.y = target_y
-            else:
-                self.x += (dx / dist) * self.speed
-                self.y += (dy / dist) * self.speed
+                dist = math.hypot(dx, dy)
+                if dist < self.speed:
+                    self.x = target_x
+                    self.y = target_y
+                else:
+                    self.x += (dx / dist) * self.speed
+                    self.y += (dy / dist) * self.speed
 
 
-        # trzeba wykminic i dodac tak jak pisalem wyzej implemetnacje w tym miejscu co sie dzieej jak gracz i gruby stoja na tym samym poly
+            # trzeba wykminic i dodac tak jak pisalem wyzej implemetnacje w tym miejscu co sie dzieej jak gracz i gruby stoja na tym samym poly
 
-        #print(f"Enemy pozcyja: x={self.x:.1f}, y={self.y:.1f}, tile={self.current_tile()}")
-        #print(f"Gruby: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
-        print(f"Gruby: (speed={self.speed:.2f}, stamina={self.stamina}), distance={Entity.distance_to_player(self, player.x, player.y):.2f})")
+            #print(f"Enemy pozcyja: x={self.x:.1f}, y={self.y:.1f}, tile={self.current_tile()}")
+            #print(f"Gruby: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
+            print(f"Gruby: (speed={self.speed:.2f}, stamina={self.stamina}), distance={Entity.distance_to_player(self, player.x, player.y):.2f})")

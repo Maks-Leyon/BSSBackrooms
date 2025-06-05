@@ -22,7 +22,7 @@ class Player:
         self.x = self.start_x
         self.y = self.start_y
         self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)
-        self.angle = -(math.pi / 2)
+        self.angle = (math.pi / 2)
         self.speed = 0.05
         self.rotationSpeed = 0.002
         self.music = 1

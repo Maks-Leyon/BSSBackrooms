@@ -99,7 +99,7 @@ class StageManager:
         if self.stage == "Menu":
             action = self.menu.update(events)
             if action == "Start":
-                self.stage = "game_start"  # Przechodzimy do ekranu GameStart
+                self.stage = "game_start"
             elif action == "Options":
                 self.stage = "options"
             elif action == "Exit":
@@ -130,14 +130,17 @@ class StageManager:
         elif self.stage == "game":
             new_stage = self.game.update(events, clock)
             if new_stage == "gameover":
+                print("win")
                 self.gameover = GameOver(self.screen, self.game.elapsed_time,True)
                 self.stage = "gameover"
             elif new_stage == "gameLose":
+                print("lose")
                 self.gameover = GameOver(self.screen, self.game.elapsed_time, False)
                 self.stage = "gameover"
             self.stage = new_stage
 
         elif self.stage == "gameover":
+            print("klose")
             print("gameover")
             new_stage = self.gameover.update(events)
             if new_stage == "Menu":

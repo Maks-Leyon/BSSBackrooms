@@ -11,7 +11,7 @@ from Note import Note
 
 class Game:
     def __init__(self, screen, player):
-        self.start = pygame.time.get_ticks() + 3000 # +3k zeby od 0 sie zaczynalo
+        self.start = None # przy pierwszym ruchu zaczyna dopiero sie robic
         self.screen = screen
         self.player = player
         self.current_music = None
@@ -22,6 +22,9 @@ class Game:
         self.jumpscare_fadeout = 0
         self.gg = False
 
+        self.min = 0
+        self.sec = 0
+        self.ms = 0
 
         self.music_files = {
             1: "Assets/Sounds/bg_dark.mp3",
@@ -61,7 +64,10 @@ class Game:
         pygame.mixer.Channel(1).set_volume(0.0)
 
     def reset(self):
-        self.start = pygame.time.get_ticks()
+        self.start = None
+        self.min = 0
+        self.sec = 0
+        self.ms = 0
         self.jumpscare_fadeout = 0
 
         self.game_over = False
@@ -71,6 +77,19 @@ class Game:
         self.enemy.x = 13 * TILE_SIZE + TILE_SIZE // 2
         self.enemy.y = 13 * TILE_SIZE + TILE_SIZE // 2
         Map.tiles = {}
+
+
+
+        self.player.reset()
+
+        self.enemy.reset()
+
+        Note.count = 0
+        Note.total_notes = 0
+        for note in self.notes:
+            note.collected = False
+            note.open_note = False
+
         self.notes = [  # NOTATKI DOTYCZACE PIERWSZEGO LVL, TKZ LVL PSM ROMAN MAKS PDF
             Note((5, 6),
                  'Notatka 1:\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\n\nOn zawsze trafia.',
@@ -83,16 +102,23 @@ class Game:
                  self.note_bg, self.font, 3)
         ]
 
-        self.player.reset()
 
-        self.enemy.reset()
-
-        Note.count = 0
-        for note in self.notes:
-            note.collected = False
-            note.open_note = False
 
     def update(self, events, fps):
+        if self.start is None:  #dopoki gracz sie nie ruszy
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w] or keys[pygame.K_s]:
+                self.enemy.start_chase = True
+                self.start = pygame.time.get_ticks() # po pierwszym nacisniecu w/s
+                print("Start time:", self.start)
+
+        if self.start is not None:
+
+            elapsed = pygame.time.get_ticks() - self.start
+            self.elapsed_time = elapsed / 1000
+            self.min = int(self.elapsed_time // 60)
+            self.sec = int(self.elapsed_time % 60)
+            self.ms = int((self.elapsed_time * 1000) % 1000)
 
         if self.gg:
             pygame.mixer.Channel(0).set_volume(0.0)
@@ -101,11 +127,7 @@ class Game:
             self.gg = False
             return "gameLose"
 
-        elapsed = pygame.time.get_ticks() - self.start # ile miliseuknd od startu
-        self.elapsed_time =elapsed # do zapisu
-        self.min = elapsed // 60000
-        self.sec = (elapsed % 60000) // 1000
-        self.ms = elapsed % 1000
+
 
 
         pygame.mixer.Channel(0).set_volume(0.5)
@@ -121,7 +143,7 @@ class Game:
             ##
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 return "gameLose"
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                 return "gameover"
 
         keys = pygame.key.get_pressed()

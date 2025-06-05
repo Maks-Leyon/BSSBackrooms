@@ -5,7 +5,8 @@ from Game.SaveAndLoad import *
 
 class GameOver:
     def __init__(self, screen,elapsed_time, win):
-        print("HALO")
+        if not win:
+            print("HALO")
         self.screen = screen
         self.font = pygame.font.SysFont(None, 60)
         self.win = win
@@ -28,6 +29,10 @@ class GameOver:
 
 
     def update(self, events):
+        if not self.win:
+            print("update false")
+        elif self.win:
+            print("update true")
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
 

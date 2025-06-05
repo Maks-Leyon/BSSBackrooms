@@ -1,4 +1,5 @@
 import numpy as np
+import pygame
 
 # Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro i ktora jednoczesnie 2x wolniej laduje gre pozdro(jeden z dwoch jest przeciwnikiem i hejterem tej blbioitrki)
 from numba import njit
@@ -68,6 +69,8 @@ class Renderer:
     def __init__(self, py):
         self.frame = np.random.uniform(0,1, (NUM_RAYS, VRESOLUTION*2, 3))
         self.floorimage = py.surfarray.array3d(py.image.load("Assets/Textures/floor.png"))
+
+        self.wallimage = pygame.surfarray.array3d(pygame.image.load("Assets/Textures/bss1.png"))
 
     #Nowa funkcja, która odpowiada za renderowanie ścian
     def draw_walls(self, sc, z_buffer, angle):
@@ -165,7 +168,7 @@ class Renderer:
                             column = spsurf.subsurface((i, 0, 1, int(proj_height)))
                             # Rysujemy kolumnę sprite'a na ekranie
                             screen.blit(column, (xi, screen_y))
-                            #print("rendering!")
+                            #print("rendering!")  gdzie okreslam kolor scian ktore tworze
 
 
     """@njit() #konwertery dla usprawnienia programu
