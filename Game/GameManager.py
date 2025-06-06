@@ -71,6 +71,7 @@ class Game:
         self.sec = 0
         self.ms = 0
         self.jumpscare_fadeout = 0
+        self.player.pos = (self.player.x // TILE_SIZE, self.player.y // TILE_SIZE)
 
         self.game_over = False
 
@@ -201,7 +202,7 @@ class Game:
             self.game_over = True
             self.elapsed_time = pygame.time.get_ticks() - self.start
             print(self.elapsed_time)
-            print("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
             pygame.mixer.Channel(0).set_volume(0.0)
             pygame.mixer.Channel(1).set_volume(0.0)
             return "gameover"

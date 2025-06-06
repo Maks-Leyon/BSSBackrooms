@@ -19,8 +19,8 @@ class Options:
         self.slider = Slider(HALF_WIDTH, HALF_HEIGHT, (500,30), initial_val, min_speed, max_speed)
 
         self.buttons = [ Button((WIDTH * 0.1,320,WIDTH * 0.15,50), "Creepy"),
-                         Button( (WIDTH * 0.3,320,WIDTH * 0.15,50), "Przyjaciele"),
-                         Button((WIDTH * 0.5,320,WIDTH * 0.15,50), "Femboye"),
+                         Button( (WIDTH * 0.3,320,WIDTH * 0.15,50), "Friends"),
+                         Button((WIDTH * 0.5,320,WIDTH * 0.15,50), "Femboys"),
                          Button((WIDTH * 0.7,320,WIDTH * 0.15,50), "ASD"),
                          Button((WIDTH * 0.4, 450, WIDTH * 0.2, 50), "How to Play")
                          ]

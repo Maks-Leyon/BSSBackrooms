@@ -162,10 +162,10 @@ class StageManager:
             if result == "Creepy":
                 self.player.music = 1
                 self.stage = "options"
-            elif result == "Przyjaciele":
+            elif result == "Friends":
                 self.player.music = 2
                 self.stage = "options"
-            elif result == "Femboye":
+            elif result == "Femboys":
                 self.player.music = 3
                 self.stage = "options"
             elif result == "ASD":

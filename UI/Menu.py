@@ -15,12 +15,13 @@ class Menu:
         self.back = pygame.transform.scale(self.back, (self.screen.get_width(), self.screen.get_height()))
 
         self.buttons = [
-            Button((self.x, self.y, self.szer, self.wys), "Start"),
-            Button((self.x, self.y + 100, self.szer, self.wys), "Options"),
-            Button((self.x, self.y + 200, self.szer, self.wys), "Exit")
+            Button((self.x, self.y +50, self.szer, self.wys), "Start"),
+            Button((self.x, self.y + 150, self.szer, self.wys), "Options"),
+            Button((self.x, self.y + 250, self.szer, self.wys), "Exit")
         ]
 
-        self.font = pygame.font.SysFont("Assets/Fonts/AlumniSansSC-Italic.ttf", 60)
+        self.font = pygame.font.Font("Assets/Fonts/AlumniSansSC-Italic.ttf", 60)
+        self.fontAuthors = pygame.font.Font("Assets/Fonts/AlumniSansSC-Italic.ttf",30)
 
     def update(self, events):
         mouse_pos = pygame.mouse.get_pos()
@@ -44,8 +45,9 @@ class Menu:
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.back, (0,0))
         title_surf = self.font.render("BSS Backrooms", True, WHITE)
-        authors = self.font.render("By Stulejon&MikseGame04",True,RED)
+        authors = self.fontAuthors.render("By Stulejon&MikseGame04",True,RED)
         self.screen.blit(title_surf, (self.screen.get_width() // 2 - title_surf.get_width() // 2, 100))
+        self.screen.blit(authors, (self.screen.get_width() // 2 , 150))
 
         for button in self.buttons:
             button.draw(self.screen)
