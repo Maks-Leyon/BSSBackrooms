@@ -69,10 +69,6 @@ class Note(Entity):
         return f"Zebrane: {Note.count}/{Note.total_notes}"
 
     @classmethod
-    def count_collected_notes(cls, notes):
-        return sum(1 for note in notes if note.collected)
-
-    @classmethod
     def show_notes(cls, notes, keys, ev):
         if Note.open_notes:
             for e in ev:

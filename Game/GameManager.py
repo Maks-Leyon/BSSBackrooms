@@ -4,6 +4,7 @@ from numba.core.imputils import for_iter
 from pygame.display import update
 
 from Enemy import Enemy
+from Game.Pickup import Pickup
 from Map import Map
 from Renderer import Renderer, floor_casting, cast_ray
 from Settings import *
@@ -21,6 +22,8 @@ class Game:
         self.level = 1
         self.jumpscare_fadeout = 0
         self.gg = False
+        #nowy epicki paused time ktory naprawia wszystko B)
+        self.paused_time = None
 
         self.min = 0
         self.sec = 0
@@ -39,12 +42,17 @@ class Game:
 
 
         self.note_bg = pygame.image.load("Assets/Textures/note_base.png")
-
+        self.pickup_bg = pygame.image.load("Assets/Textures/rj45.png")
 
         self.notes = [  #NOTATKI DOTYCZACE PIERWSZEGO LVL, TKZ LVL PSM ROMAN MAKS PDF
-            Note((5,6), 'Notatka 1:\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\n\nOn zawsze trafia.', self.note_bg, self.font, 1),
-            Note((19, 7), "Notatka 2:\nJego zdjecia.\nNasze zdjecia\nprzyjal moja forme\n  zabral mi twarz\n\nczuje jego wzrok\nczuje jego oddech\nczuje jego dotyk\n\nnie moze mnie zlapac. nie moze.", self.note_bg, self.font, 2),
-            Note((10, 18), "Notatka 3:\nTo nie byla prawda\ntylko fasada ukrywajaca wszystko\nwypisalem sie z PSM juz dawno temu\n\nmusialem zrobic to znowu.\nGdybym sobie przypomnial\n\nmusialem zejsc glebiej. Musialem zobaczyc prawde", self.note_bg, self.font, 3)
+            Note((11,12), 'Notatka 1:\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\n\nOn zawsze trafia.', self.note_bg, self.font, 1),
+            Note((4, 7), "Notatka 2:\nJego zdjecia.\nNasze zdjecia\nprzyjal moja forme\n  zabral mi twarz\n\nczuje jego wzrok\nczuje jego oddech\nczuje jego dotyk\n\nnie moze mnie zlapac. nie moze.", self.note_bg, self.font, 2),
+            Note((14, 5), "Notatka 3:\nTo nie byla prawda\ntylko fasada ukrywajaca wszystko\nwypisalem sie z PSM juz dawno temu\n\nmusialem zrobic to znowu.\nGdybym sobie przypomnial\n\nmusialem zejsc glebiej. Musialem zobaczyc prawde", self.note_bg, self.font, 3)
+        ]
+
+        self.pickups =[
+            Pickup((11,2), self.pickup_bg, 1),
+            Pickup((2,11), self.pickup_bg, 2)
         ]
 
 
@@ -55,7 +63,7 @@ class Game:
 
         #self.spsize = np.asarray(self.enemy_sprite.get_size())
        # self.spx, self.spy = 13, 15
-        self.enemy = Enemy(13, 15, self.map, self.enemy_sprite, pygame.mixer) #srodek kafla
+        self.enemy = Enemy(8, 8, self.map, self.enemy_sprite, pygame.mixer) #srodek kafla
 
         #pygame.mixer.music.load("Assets/Sounds/bg_dark.mp3")
         pygame.mixer.Channel(0).play(pygame.mixer.Sound("Assets/Sounds/bg_dark.mp3"),-1)
@@ -65,8 +73,8 @@ class Game:
 
     def reset(self):
         self.start = None
-        pygame.mixer.Channel(0).stop() # niewiemc zemu sie nie zatrzymuje
-        pygame.mixer.Channel(1).stop()
+        pygame.mixer.Channel(0).set_volume(0.0) # nie stopuj, tylko wyciszaj
+        pygame.mixer.Channel(1).set_volume(0.0)
         self.min = 0
         self.sec = 0
         self.ms = 0
@@ -77,8 +85,8 @@ class Game:
 
         self.level = 1
         self.map.game_map = MAP1
-        self.enemy.x = 13 * TILE_SIZE + TILE_SIZE // 2
-        self.enemy.y = 13 * TILE_SIZE + TILE_SIZE // 2
+        self.enemy.x = 9 * TILE_SIZE + TILE_SIZE // 2
+        self.enemy.y = 9 * TILE_SIZE + TILE_SIZE // 2
         Map.tiles = {}
 
 
@@ -94,15 +102,19 @@ class Game:
             note.open_note = False
 
         self.notes = [  # NOTATKI DOTYCZACE PIERWSZEGO LVL, TKZ LVL PSM ROMAN MAKS PDF
-            Note((5, 6),
+            Note((11, 12),
                  'Notatka 1:\nCo on tu robi?!\n\nRoman.\nMialem nadzieje, ze juz nigdy go nie spotkam\nA jednak jest.\nZaczalem uciekac w druga strone.\nPoczulem nagly bol.\njakby strzala.\n\nOn zawsze trafia.',
                  self.note_bg, self.font, 1),
-            Note((19, 7),
+            Note((4, 7),
                  "Notatka 2:\nJego zdjecia.\nNasze zdjecia\nprzyjal moja forme\n  zabral mi twarz\n\nczuje jego wzrok\nczuje jego oddech\nczuje jego dotyk\n\nnie moze mnie zlapac. nie moze.",
                  self.note_bg, self.font, 2),
-            Note((10, 18),
+            Note((14, 5),
                  "Notatka 3:\nTo nie byla prawda\ntylko fasada ukrywajaca wszystko\nwypisalem sie z PSM juz dawno temu\n\nmusialem zrobic to znowu.\nGdybym sobie przypomnial\n\nmusialem zejsc glebiej. Musialem zobaczyc prawde",
                  self.note_bg, self.font, 3)
+        ]
+        self.pickups = [
+            Pickup((11, 2), self.pickup_bg, 1),
+            Pickup((2, 11), self.pickup_bg, 2)
         ]
 
 
@@ -137,11 +149,13 @@ class Game:
 
         for event in events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                #zapisuje czas podczas zapauzowania, aby potem wykorzystac go do offsetu czasu w stagemanager
+                self.paused_time = self.elapsed_time
                 pygame.mixer.Channel(0).set_volume(0.0)
                 pygame.mixer.Channel(1).set_volume(0.0)
                 for n in self.notes:
                     n.open_note = False
-                return "Menu"
+                return "game_start"
 
             ##
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
@@ -167,7 +181,7 @@ class Game:
                 return "game"
 
         #Jesli jest enemy blisko gracza, to:
-        if self.enemy.distance_to_player(self.player.x, self.player.y) < 40:
+        if self.enemy.distance_to_player(self.player.x, self.player.y) < 40 or Map.get_tile(self.enemy.current_tile()) == Map.get_tile(self.player.pos):
             #jumpscare sound
             pygame.mixer.Channel(2).set_volume(4)
             pygame.mixer.Channel(2).play(pygame.mixer.Sound("Assets/Sounds/jumpsker.wav"))
@@ -183,6 +197,8 @@ class Game:
         self.player.move(keys, fps)
         self.enemy.update(self.player)
 
+        for p in self.pickups:
+            p.update(self.player, keys)
         for n in self.notes:
             n.update(self.player.pos, keys, events)
         Note.show_notes(self.notes, keys, events)
@@ -215,27 +231,40 @@ class Game:
         return "game"
 
     def update_level(self, lvl):
+        print("ROBIE UPDATE LVL")
         if lvl == 2:
+            print("ROBIE LVL 2")
             self.level = 2
             self.map.game_map = MAP2
             if len(self.notes) == 3:                #NOTATKI DOTYCZACE 2 LVL, TKZW LVL TOMASZEW+PCH
-                self.notes.append(Note((11, 12), 'Notatka 4:\nPamietam.\n\nBylem na wykladzie z Javy prowadzonym przezz KKMPPNDMIMT\ngdy uslyszalem : „POPRAWKA? Co to takiego?”\n\nNagle zamigotalo wszystko.\n\nObudzilem sie w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n„BSS”', self.note_bg, self.font, 4))
-                self.notes.append(Note((3, 13), 'Notatka 5:\nZnowu onn. PCH.\nSiedzi w kacie w sweterku, obgryza dlugopis.\n"Algorytm nigdy nie spi"\nTo powiedzial. Nikt sie nie smial\nWyszeptal potem:\n"Kazda petla ma swoje przeznaczenie."\nCzy to grozba?\nNa scianie narysowal drzewo binarne.\n\nOno patrzylo.', self.note_bg, self.font, 5))
-                self.notes.append(Note((20, 11), 'Notatka 6:\nPoprawka? Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka?\nPoprawka? Co to jest poprawka? Poprawka? Co to \njest poprawka? Poprawka? Co to jest poprawka? Poprawka?\n Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka?', self.note_bg, self.font, 6))
-            self.enemy.x = 12 * TILE_SIZE + TILE_SIZE // 2
-            self.enemy.y = 13 * TILE_SIZE + TILE_SIZE // 2
+                self.notes.append(Note((9, 9), 'Notatka 4:\nPamietam.\n\nBylem na wykladzie z Javy prowadzonym przezz KKMPPNDMIMT\ngdy uslyszalem : „POPRAWKA? Co to takiego?”\n\nNagle zamigotalo wszystko.\n\nObudzilem sie w labiryncie, ogromnych serwerow.\nZ czerwonymi napisami.\n\n„BSS”', self.note_bg, self.font, 4))
+                self.notes.append(Note((3, 11), 'Notatka 5:\nZnowu onn. PCH.\nSiedzi w kacie w sweterku, obgryza dlugopis.\n"Algorytm nigdy nie spi"\nTo powiedzial. Nikt sie nie smial\nWyszeptal potem:\n"Kazda petla ma swoje przeznaczenie."\nCzy to grozba?\nNa scianie narysowal drzewo binarne.\n\nOno patrzylo.', self.note_bg, self.font, 5))
+                self.notes.append(Note((16, 6), 'Notatka 6:\nPoprawka? Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka? \nCo to jest poprawka? Poprawka? Co to jest poprawka?\nPoprawka? Co to jest poprawka? Poprawka? Co to \njest poprawka? Poprawka? Co to jest poprawka? Poprawka?\n Co to jest poprawka? Poprawka? Co to jest \npoprawka? Poprawka? Co to jest poprawka? Poprawka?', self.note_bg, self.font, 6))
+            self.pickups = [
+                Pickup((6,12), self.pickup_bg, 3),
+                Pickup((9,4), self.pickup_bg, 4)
+            ]
+            self.enemy.x = 9 * TILE_SIZE + TILE_SIZE // 2
+            self.enemy.y = 1 * TILE_SIZE + TILE_SIZE // 2
             Map.tiles = {}
         elif lvl == 3:
+            print("ROBIE LVL 3")
+            self.update_level(2)
             self.level = 3
             self.map.game_map = MAP3
             if len(self.notes) == 6:                #NOTATKI DOTYCZACE 3 LVL, TKZW LVL SMYK
-                self.notes.append(Note((5, 19),'Notatka 7:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial bez ruchu, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.',self.note_bg, self.font, 7))
-                self.notes.append(Note((18, 21),'Notatka 8:\nNie jestem tu sam.\n z oddali słyszę znane słowa.\n"Panie i Panowie".\nMam nadzieje ze to niemozliwe.\nSłabo mi na samą myśl.\n\nMuszę to sprawdzić.',self.note_bg, self.font, 8))
-                self.notes.append(Note((12, 3),'Notatka 9:\nSzukają mnie.\nWiedzą,że tu jestem, a ja niewiem nawet ile dni tu spędziłem.\nWidzę ich.\nBrunet z lokami,dosyć dziwny.\nNiejaki "Stulejon" dość dociekliwie rozglądający sie po labiryncie\nOni są moim jedynym ratunkiem',self.note_bg, self.font, 9))
-            self.enemy.x = 12 * TILE_SIZE + TILE_SIZE // 2
-            self.enemy.y = 23 * TILE_SIZE + TILE_SIZE // 2
+                self.notes.append(Note((3, 15),'Notatka 7:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial bez ruchu, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.',self.note_bg, self.font, 7))
+                self.notes.append(Note((6, 2),'Notatka 8:\nNie jestem tu sam.\n z oddali słyszę znane słowa.\n"Panie i Panowie".\nMam nadzieje ze to niemozliwe.\nSłabo mi na samą myśl.\n\nMuszę to sprawdzić.',self.note_bg, self.font, 8))
+                self.notes.append(Note((13, 11),'Notatka 9:\nSzukają mnie.\nWiedzą,że tu jestem, a ja niewiem nawet ile dni tu spędziłem.\nWidzę ich.\nBrunet z lokami,dosyć dziwny.\nNiejaki "Stulejon" dość dociekliwie rozglądający sie po labiryncie\nOni są moim jedynym ratunkiem',self.note_bg, self.font, 9))
+            self.pickups = [
+                Pickup((12, 13), self.pickup_bg, 5),
+                Pickup((9, 9), self.pickup_bg, 6)
+            ]
+            self.enemy.x = 9 * TILE_SIZE + TILE_SIZE // 2
+            self.enemy.y = 16 * TILE_SIZE + TILE_SIZE // 2
             Map.tiles = {}
         else:
+            print("ROBIE ELSE")
             return
 
     # ta metodo jest po to zeby wyseiwtlic sprite wroga na ekrani jako jumpscare i powoli go zanikac
@@ -266,6 +295,17 @@ class Game:
         stamina_rec.width = (WIDTH//2)/(300/self.player.stamina+0.0001)
         pygame.draw.rect(self.screen,(0,0,255),stamina_rec)
 
+        #zycie jako wifi hehe
+
+        wifi1 = pygame.image.load("Assets/Textures/wififull.png")
+        wifi2 = pygame.image.load("Assets/Textures/wifimid.png")
+        wifi3 = pygame.image.load("Assets/Textures/wifilow.png")
+
+        wifi_current = wifi1 if self.player.hp == 3 else wifi2 if self.player.hp == 2 else wifi3
+
+        spsurf = pygame.transform.scale(wifi_current, (25, 25))
+        self.screen.blit(spsurf, (WIDTH * 0.2, HEIGHT * 0.9))
+
     def change_music(self, music_file):
 
         pygame.mixer.Channel(0).play(pygame.mixer.Sound(music_file),-1)
@@ -284,6 +324,9 @@ class Game:
         self.renderer.draw_walls(self.screen, z_buffer, self.player.angle)
 
         entities_to_draw = [n for n in self.notes if not n.open_note and not n.collected]
+        for p in self.pickups:
+            if not p.collected:
+                entities_to_draw.append(p)
         entities_to_draw.append(self.enemy)
 
         entities_to_draw.sort(key=lambda e: -e.distance_to_player(self.player.x, self.player.y))

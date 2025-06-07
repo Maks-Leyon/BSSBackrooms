@@ -9,7 +9,6 @@ from UI.HowToPlay import HowToPlay
 from UI.GameStart import GameStart
 from UI.Ranking import Ranking
 from UI.RealGameOver import RealGameOver
-from Player import Player
 
 class StageManager:
     def __init__(self, screen, player, gamemap):
@@ -105,6 +104,7 @@ class StageManager:
             elif action == "Options":
                 self.stage = "options"
             elif action == "Exit":
+                SaveAndLoad.saveGame(self.game)
                 pygame.quit()
                 sys.exit()
 
@@ -114,6 +114,9 @@ class StageManager:
                 SaveAndLoad.loadGame(self.game)
                 self.stage = "game"
             elif action == "Start":
+                #jesli jest paused time, to usuwamy go od tickow zeby ustawic nowy start dzieki czemu czas nie wzrasta podczas pauzy
+                if self.game.paused_time:
+                    self.game.start = pygame.time.get_ticks() - self.game.paused_time
                 pygame.mixer.Channel(0).set_volume(0.5)
                 if self.need_reset:
                     self.game.reset()

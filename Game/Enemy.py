@@ -81,12 +81,12 @@ class Enemy(Entity):
 
     def teleport(self):
         ct = Map.get_tile(self.current_tile())
-        if ct.x < 10:
-            self.x = 23 * TILE_SIZE + TILE_SIZE // 2
+        if ct.x < 9:
+            self.x = 16 * TILE_SIZE + TILE_SIZE // 2
         else:
             self.x = 1 * TILE_SIZE + TILE_SIZE // 2
-        if ct.y < 10:
-            self.y = 23 * TILE_SIZE + TILE_SIZE // 2
+        if ct.y < 9:
+            self.y = 16 * TILE_SIZE + TILE_SIZE // 2
         else:
             self.y = 1 * TILE_SIZE + TILE_SIZE // 2
 

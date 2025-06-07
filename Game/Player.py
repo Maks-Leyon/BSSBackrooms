@@ -4,8 +4,8 @@ from Game.Map import Map
 
 class Player:
     def __init__(self, gamemap):
-        self.start_x = 12 * TILE_SIZE + TILE_SIZE//2
-        self.start_y = 21 * TILE_SIZE + TILE_SIZE//2
+        self.start_x = 10 * TILE_SIZE + TILE_SIZE//2
+        self.start_y = 15 * TILE_SIZE + TILE_SIZE//2
 
         self.x = self.start_x
         self.y = self.start_y
@@ -22,7 +22,7 @@ class Player:
         self.x = self.start_x
         self.y = self.start_y
         self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)
-        self.angle = (math.pi / 2)
+        self.angle = math.pi
         self.speed = 0.05
         self.rotationSpeed = 0.002
         self.music = 1
