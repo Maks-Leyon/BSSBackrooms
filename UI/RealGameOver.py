@@ -62,14 +62,14 @@ class RealGameOver:
         self.screen.blit(note_bg_scaled, (0, 0))
         good_ending = "Zle zakonczenie"
         time = f"Czas: {self.min:02}:{self.sec:02}:{self.ms:0}"
-        end_history_text = "\nNie udalo sie...\nUcieczka zawiodla, a oni nadal mnie scigaja.\nMuszr wrociv i dokonczyc to, co zaczalem.\n To jeszcze nie koniec.\n\nCzeka mnie kolejna proba."
+        end_history_text = "\nNie udalo sie...\nCzuje, ze serwerownia mnie otacza.\nJeszcze nie wszystko rozumiem...\nMusze wrocic i dokonczyc to, co zaczalem.\n To jeszcze nie koniec.\n\nCzeka mnie kolejna proba."
         def draw_multiline_text(screen, text, x, y, font, color):
             lines = text.split("\n")
             line_height = font.get_height()
             for i, line in enumerate(lines):
                 line_surface = font.render(line, True, color)
                 screen.blit(line_surface, (x, y + i * line_height))
-        draw_multiline_text(self.screen, end_history_text, self.screen.get_width() // 2 - 200, 100, self.font, BLACK)
+        draw_multiline_text(self.screen, end_history_text, self.screen.get_width()*0.19, self.screen.get_height()*0.19, self.font, BLACK)
 
         time_sruface = self.font.render(time, True, BLACK)
         self.screen.blit(time_sruface, (self.screen.get_width() // 2 - 150 // 2 + 200, 70))

@@ -6,6 +6,7 @@ Zrobione:
         - Karteczki
         - Menu karteczek
         - Generacja wyjścia/przejścia na nstępne piętro
+        - Jakiś sposób na odzyskiwanie życia
     - Czarna mgła gdy promienie z raycastingu osiagaja limit
     - Dla NextBota:
         - Render NextBota
@@ -21,17 +22,10 @@ Zrobione:
     -ranking
     -reset gry
     -sterowanie
+    - Tekstury scian
 
-
-
-TODO:
-    ** Znajdźki na mapie, w tym:
-        - Jakiś sposób na odzyskiwanie życia, zwiększanie szybkości
-        - Sposób na zdobycie broni/amunicji
-    - Dla NextBota:
-        - INNY SPRITE I DZWIEK DLA KAZDEGO PIETRA (TOMASZEW dla 2, SMYK dla 3)
-    - System broni/strzelania w NextBota, aby można było go zestunować (FORK BOMBA)
 
 OPTIONAL/ASSETS:
-    - Tekstury scian, ziemi, broni itp
     - Stworzenie napisow koncowych
+    - Dla NextBota:
+        - INNY SPRITE I DZWIEK DLA KAZDEGO PIETRA (TOMASZEW dla 2, SMYK dla 3) ?? jak chcesz mozemy zrobic

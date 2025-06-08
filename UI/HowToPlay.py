@@ -37,8 +37,8 @@ class HowToPlay:
             "Sterowanie:",
             "Strzałki lewa/prawa - obrót lewo/prawo",
             "W, S - przód/tył",
-            "Shift - użycie staminy",
-            "E - otwieranie notatek(w pobliżu)",
+            "Shift - bieg (korzysta ze staminy)",
+            "E - interakcja (zebranie notatke, użycie RJ-45)",
             "N - Przegladanie notatek",
             "Esc - wyjście do menu"
         ]

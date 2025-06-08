@@ -37,7 +37,7 @@ class Game:
         }
 
         self.renderer = Renderer(pygame)
-        #self.font = pygame.font.SysFont("Arial", 25)
+        self.renderer.wall_texture = pygame.image.load("Assets/Textures/servergray.png").convert()
         self.font = pygame.font.Font("Assets/Fonts/messy.ttf", 25)
 
 
@@ -73,6 +73,7 @@ class Game:
 
     def reset(self):
         self.start = None
+        self.renderer.wall_texture = self.py.image.load("Assets/Textures/servergray.png").convert()
         pygame.mixer.Channel(0).set_volume(0.0) # nie stopuj, tylko wyciszaj
         pygame.mixer.Channel(1).set_volume(0.0)
         self.min = 0
@@ -249,13 +250,14 @@ class Game:
             Map.tiles = {}
         elif lvl == 3:
             print("ROBIE LVL 3")
+            self.renderer.wall_texture = pygame.image.load("Assets/Textures/serverred.png").convert()
             self.update_level(2)
             self.level = 3
             self.map.game_map = MAP3
             if len(self.notes) == 6:                #NOTATKI DOTYCZACE 3 LVL, TKZW LVL SMYK
-                self.notes.append(Note((3, 15),'Notatka 7:\nPoszedlem sprawdzic, skąd ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial bez ruchu, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.',self.note_bg, self.font, 7))
-                self.notes.append(Note((6, 2),'Notatka 8:\nNie jestem tu sam.\n z oddali słyszę znane słowa.\n"Panie i Panowie".\nMam nadzieje ze to niemozliwe.\nSłabo mi na samą myśl.\n\nMuszę to sprawdzić.',self.note_bg, self.font, 8))
-                self.notes.append(Note((13, 11),'Notatka 9:\nSzukają mnie.\nWiedzą,że tu jestem, a ja niewiem nawet ile dni tu spędziłem.\nWidzę ich.\nBrunet z lokami,dosyć dziwny.\nNiejaki "Stulejon" dość dociekliwie rozglądający sie po labiryncie\nOni są moim jedynym ratunkiem',self.note_bg, self.font, 9))
+                self.notes.append(Note((3, 15),'Notatka 7:\nPoszedlem sprawdzic, skad ten głos.\nZnalazlem go.\n\nPan Adam.\nSiedzial bez ruchu, wpatrzony w ekran.\npowtarzal komendy Basha jak mantre.\nNie moglem sie ruszyc.\nOn kontrolowal wszystko.',self.note_bg, self.font, 7))
+                self.notes.append(Note((6, 2),'Notatka 8:\nNie jestem tu sam.\n z oddali słyszę znane słowa.\n"Panie i Panowie".\nMam nadzieje ze to niemozliwe.\nSłabo mi na samą myśl.\n\nMusze to sprawdzic.',self.note_bg, self.font, 8))
+                self.notes.append(Note((13, 11),'Notatka 9:\nSzukaja mnie.\nWiedza, ze tu jestem, a ja niewiem nawet ile dni tu spedziłem.\nWidze ich.\nBrunet z lokami, dosyc dziwny.\nCos co probuje mnie imitowac\nMoje najgorsze koszmary\nAle czuje ze jestem juz blisko\n\nSlysze ze cos mnie wola',self.note_bg, self.font, 9))
             self.pickups = [
                 Pickup((12, 13), self.pickup_bg, 5),
                 Pickup((9, 9), self.pickup_bg, 6)
@@ -321,7 +323,7 @@ class Game:
         self.screen.blit(surf, (0, 0))
 
         z_buffer = cast_ray(self.player.x, self.player.y, self.player.angle, self.map.game_map)
-        self.renderer.draw_walls(self.screen, z_buffer, self.player.angle)
+        self.renderer.draw_walls(self.screen, z_buffer, self.player.angle, self.player.x, self.player.y)
 
         entities_to_draw = [n for n in self.notes if not n.open_note and not n.collected]
         for p in self.pickups:

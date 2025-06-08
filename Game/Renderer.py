@@ -67,27 +67,81 @@ def cast_ray(px, py, angle, game_map):
 
 class Renderer:
     def __init__(self, py):
+        self.py = py
         self.frame = np.random.uniform(0,1, (NUM_RAYS, VRESOLUTION*2, 3))
         self.floorimage = py.surfarray.array3d(py.image.load("Assets/Textures/floor.png"))
 
-        self.wallimage = pygame.surfarray.array3d(pygame.image.load("Assets/Textures/bss1.png"))
+        self.wall_texture = self.py.image.load("Assets/Textures/servergray.png").convert()
+        self.texture_width = self.wall_texture.get_width()
+        self.texture_height = self.wall_texture.get_height()
 
-    #Nowa funkcja, która odpowiada za renderowanie ścian
-    def draw_walls(self, sc, z_buffer, angle):
-        cur_angle = angle - FOV / 2 #Zaczynamy z lewej strony FOV
+    def draw_walls(self, sc, z_buffer, player_angle, px, py):
+        cur_angle = player_angle - FOV / 2  # Zaczynamy z lewej strony FOV
 
-        for ray in range(NUM_RAYS): #Dla każdego promienia
-            if z_buffer[ray] != float('inf'): #To pozwala zignorować te promienie, które nic nie trafiły
-                depth = z_buffer[ray] # bierzemy depth z buffera dla obecnego promienia
-                proj_height = PROJ_COEFF / (depth + 0.0001)  # Ustalanie wysokości ściany PROJ_COEFF
-                color = 255 / (1 + depth * depth * 0.0003)
+        for ray in range(NUM_RAYS):  # Dla każdego promienia
+            if z_buffer[ray] != float('inf'): #Jesli w cos trafil
+                ogdepth = z_buffer[ray]  # bierzemy depth z buffera dla obecnego promienia
+                proj_height = PROJ_COEFF / (ogdepth + 0.0001)  # wysokosc sciany obliczana
 
-                Map.render(sc, ray * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height,
-                           color)  # rysowanie sciany
-                # ray * SCALE -> indeks promienia (zaczynający się od 0) razy jego szerokość, określa lewą krawędź
-                # HALF_HEIGHT - proj_height //2 -> Połowa ekranu odjąć połowa wysokości, określa górną krawędź
-                # SCALE -> Szerokość jako szerokość promienia
-                # proj_height -> Wysokość ściany
+                #literalnie przywracamy efekt rybiego oka bo inaczej takie czarne linie sie robia, max by nie dzielic przez zero
+                # ogolnie to przez to ze rybie oko korzysta z innej (prawdziwej) odleglosci, ktorej potrzebujemy do obliczenia prawdziwych kordow
+                depth = ogdepth / max(math.cos(player_angle - cur_angle), 0.00001)
+
+                #kordy punktu, w kotry uderzyl promien
+                hit_x = px + depth * math.cos(cur_angle)
+                hit_y = py + depth * math.sin(cur_angle)
+
+                #offset sprawdza, w kotra czesc kafelka trafilismy.
+                #nasz tile size to 64, wiec jesli mamy x=130 to z tego wynika ze x w danym kafelku
+                #to 2, czyli jestesmy na 2 pikselu w kafelku na x pozdro to samo dla y
+                offset_x = hit_x % TILE_SIZE
+                offset_y = hit_y % TILE_SIZE
+
+                # tutaj sprawdzamy po prostu czy jestesmy blizej do pionowej czy poziomej krawedzi
+                dist_to_vert = min(offset_x, TILE_SIZE - offset_x)
+                dist_to_horiz = min(offset_y, TILE_SIZE - offset_y)
+
+                # switch zaraz wytluamcze
+                switch = False
+
+                if dist_to_vert < dist_to_horiz:
+                    #jesli trafilismy w pionowa, to bierzemy offset y do szukania w teksturze sciany
+                    texture_offset = offset_y
+                    switch = TILE_SIZE - offset_x < offset_x  # jest blizej prawej krawedzi sciany
+                else:
+                    # a jesli pozioma to offset x oczywiscie
+                    texture_offset = offset_x
+                    switch = TILE_SIZE - offset_y > offset_y # jest blizej gornej krawedzi sciany
+
+                #mega essowo zrobiony procent kafelka na procent wielkosci tekstury bo nie wiedzialem jak inaczej to przeliczyc
+                #no i on nam x z ktorego startujemy pokazuj
+                texture_x = int((texture_offset / TILE_SIZE) * self.texture_width)
+                #wywalalo out of bounds wiec musialem ogranizyc
+                texture_x = max(0, min(texture_x, self.texture_width - 1))
+
+                #ODWRACAMY X TEKSTURy, ABY NIE BYLA ONA BRANA Z PRAWEJ DO LEWEJ, TYLKO ZAWSZE LEWA DO PRAWEJ WAZNE!!
+                if switch:
+                    texture_x = max(0, min(self.texture_width - texture_x, self.texture_width - 1))
+
+                #tworzy kolumne z tekstury, zaczyna sie na x ktory przed chwila obliczylismy, zaczyna sie na gorze zawsze
+                # szerokosc jeden zeby nie wywalalo poza skale od razu, i wysokosc tekstury
+                wall_column = self.wall_texture.subsurface(texture_x, 0, 1, self.texture_height)
+                #skalujemy ja, szerokosc razy skala czyli wiadomo przestrzen meidzy promieniami, wysokosc razy wielkosc sciany
+                wall_column_scaled = self.py.transform.scale(wall_column, (SCALE, proj_height))
+                #zeby idealnie wycentrowacna byla sciana
+                draw_y = HALF_HEIGHT - proj_height // 2
+                #blitujemy
+                sc.blit(wall_column_scaled, (ray * SCALE, draw_y))
+
+                #cieniowanie takie samo jak zawsze
+                dark = 255 / (1 + depth * depth * 0.0003)
+                dark_color = (dark, dark, dark)
+
+                # tworzymy nakladke po prostu, ktorea przyciemniamu
+                darksrf = pygame.Surface(wall_column_scaled.get_size())
+                darksrf.fill(dark_color)
+                # BLEND_RGB_MULT sluzy do mnozenia kolorow wiec jest idealne
+                sc.blit(darksrf, (ray * SCALE, draw_y), special_flags=pygame.BLEND_MULT)
 
             cur_angle += DELTA_ANGLE # dodajemy kąt między promieniami DELTA_ANGLE aby pracować na kącie następnego promienia
 

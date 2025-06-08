@@ -32,7 +32,7 @@ class Note(Entity):
             skibidi = self.sprite
             skibidi = pygame.transform.scale(skibidi, (screen.get_width()*0.87, screen.get_height()*0.85))
             screen.blit(skibidi,(screen.get_width()*0.065,screen.get_height()*0.075))
-            self.draw_multiline_text(screen, self.note, screen.get_width()*0.25, screen.get_height()*0.25, self.font, BLACK)
+            self.draw_multiline_text(screen, self.note, screen.get_width()*0.19, screen.get_height()*0.19, self.font, BLACK)
 
 
             inf = self.font.render("NACISNIJ SPACJE ABY ZAMKNAC", True, BLUE)

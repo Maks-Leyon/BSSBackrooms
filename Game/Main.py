@@ -9,15 +9,12 @@ from StageManager import StageManager
 from SaveAndLoad import *
 
 pygame.init()
-Renderer = Renderer(pygame)
 
 def Main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
     pygame.display.set_caption("Miki i Maksiu <333333")
     clock = pygame.time.Clock()
-
-
     gamemap = Map()
     p = Player(gamemap)
     stage_manager = StageManager(screen, p, gamemap)

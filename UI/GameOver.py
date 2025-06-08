@@ -16,7 +16,7 @@ class GameOver:
         x = screen.get_width() // 2 - 130
         y = 100
         self.buttons = [
-            Button.Button((x + 50, y + 350, szer, wys), "Potwierdzam")
+            Button.Button((x + 50, y + 370, szer, wys), "Obecny")
         ]
 
         self.input_text = ""
@@ -49,7 +49,7 @@ class GameOver:
                     if button.is_clicked(mouse_pos, mouse_pressed):
                         print("fueah")
                         print(button.text)
-                        if button.text == "Potwierdzam":
+                        if button.text == "Obecny":
                             SaveAndLoad.saveInfo(self.input_text, self.elapsed_time)
                             return "Menu"
 
@@ -79,7 +79,7 @@ class GameOver:
         self.screen.blit(note_bg_scaled, (0, 0))
         good_ending = "Dobre zakonczenie"
         time = f"Czas: {self.min:02}:{self.sec:02}:{self.ms:0}"
-        end_history_text = "\nW koncu sie udalo…\nPomogli mi. Ucieklem, znalazlem sie wsrod nich.\nWydaje sie, ze wszystko jest juz zakonczone.\nJednakze oni nadal czegos odemnie chca.\nNadal maja prosbe.\nBrzmiała ona:\n\nProsze, podaj swoje Imie:"
+        end_history_text = "\nW koncu rozumiem…\nZebralem notatki z calego wykladu.\nSerwerownia BSS to miejsce, ktore wyciaga z ciebie\nnajglebsze koszmary.\nJuz nigdy nie moge zaspac na wykladzie.\nPozostaje jedna rzecz.\nJedyny sposob na wyjscie.\n\nWpisz sie na liste obecnosci:"
         def draw_multiline_text(screen, text, x, y, font, color):
             lines = text.split("\n")
             line_height = font.get_height()
@@ -88,14 +88,14 @@ class GameOver:
                 screen.blit(line_surface, (x, y + i * line_height))
 
 
-        draw_multiline_text(self.screen, end_history_text, self.screen.get_width() // 2 - 200, 100, self.font, BLACK)
+        draw_multiline_text(self.screen, end_history_text, self.screen.get_width()*0.14, self.screen.get_height()*0.17, self.font, BLACK)
 
         time_sruface = self.font.render(time,True,BLACK)
         self.screen.blit(time_sruface,(self.screen.get_width() // 2 - 150 // 2 + 200,70))
         ending_surface = self.font.render(good_ending, True, GREEN)
-        self.screen.blit(ending_surface,(self.screen.get_width() // 2 - 150 // 2,100))
+        self.screen.blit(ending_surface,(self.screen.get_width() // 2 - self.screen.get_width()*0.19 // 2,self.screen.get_width()*0.12))
         txt_surface = self.font.render(self.input_text, True, RED)
-        self.screen.blit(txt_surface, (self.input_rect.x + 230, self.input_rect.y + 90))
+        self.screen.blit(txt_surface, (self.input_rect.x + self.screen.get_width()*0.22, self.input_rect.y + self.screen.get_width()*0.155))
 
         for button in self.buttons:
             button.drawWithouBG(self.screen)
