@@ -22,7 +22,8 @@ class Options:
                          Button( (WIDTH * 0.3,320,WIDTH * 0.15,50), "Friends"),
                          Button((WIDTH * 0.5,320,WIDTH * 0.15,50), "Femboys"),
                          Button((WIDTH * 0.7,320,WIDTH * 0.15,50), "ASD"),
-                         Button((WIDTH * 0.4, 450, WIDTH * 0.2, 50), "How to Play")
+                         Button((WIDTH * 0.4, 450, WIDTH * 0.2, 50), "How to Play"),
+                         Button((self.screen.get_width() // 2 - 250 // 2 - 265, 200 + 340, 120, 50), "Back")
                          ]
 
     #USELSS XDDDDDDDDDDDDDDDDDDDDDD
@@ -31,6 +32,7 @@ class Options:
     def maksPalkowskiMaPowiazaniaZFederacjaRosyjska(self):
         self.player.music = 2
     def NiktNieLubiKubyPawlika(self):
+        '''KAZDY KOCHA KUBE PAWLIKA'''
         self.player.music = 3
 
 

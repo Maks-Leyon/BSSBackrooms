@@ -73,6 +73,7 @@ class GameOver:
         return "gameover"
 
     def draw(self):
+        '''TO RYSUJE'''
         self.screen.fill((0, 0, 0))
 
         note_bg_scaled = pygame.transform.scale(self.note_bg, (self.screen.get_width(), self.screen.get_height()))

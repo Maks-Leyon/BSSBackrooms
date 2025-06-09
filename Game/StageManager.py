@@ -162,6 +162,8 @@ class StageManager:
             if result == "how_to_play":
                 self.stage = "how_to_play"
 
+
+
             if result == "Creepy":
                 self.player.music = 1
                 self.stage = "options"
@@ -174,8 +176,8 @@ class StageManager:
             elif result == "ASD":
                 self.player.music = 4
                 self.stage = "options"
-            elif result == "menu":
-                self.stage = "menu"
+            elif result == "Back":
+                self.stage = "Menu"
             else:
                 self.stage = result
 
@@ -188,3 +190,5 @@ class StageManager:
             res = self.ranking.update(events)
             if res == "Back":
                 self.stage = "game_start"
+
+

@@ -35,6 +35,7 @@ class Enemy(Entity):
     # odelglsoc Manhattana, o tyle lepsza ze dziaal na poruszasnie sie TEORETYCZNIE
     #w pionie i poziomie, nie bedzzie szedl po przekatnej, euklidesowa przechodzila mi na przekatnej wiec zmienilem
     def SpidermanDistance(self, a, b):
+        '''IDK W SUMIE POZDRO ZO'''
         return abs(a[0]-b[0]) + abs(a[1]-b[1])
 
     #boze jak ja kocham astar
