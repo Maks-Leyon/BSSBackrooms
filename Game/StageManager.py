@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from Game.GameManager import Game
 from UI.Menu import Menu
@@ -41,6 +43,7 @@ class StageManager:
             elif action == "Exit":
                 SaveAndLoad.saveGame(self.game)
                 pygame.quit()
+                sys.exit()
 
         elif self.stage == "game_start":
             action = self.game_start.update(events)
