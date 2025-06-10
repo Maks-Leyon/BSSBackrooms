@@ -3,6 +3,7 @@ from Game.Map import Map
 from Game.Settings import *
 
 class Enemy(Entity):
+    '''Ta klasa reprezentuje przeciwnika w grze, dziedziczy po klasie Entity. Pobiera ona pozycję (x, y), obiekt mapy (map_obj), sprite przeciwnika (sprite) oraz obiekt mixera dźwięku (mix) jako argumenty inicjalizacyjne.'''
     def __init__(self, x, y, map_obj, sprite, mix):
         Entity.__init__(self, sprite, x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2, sprite.get_size())
         self.map = map_obj

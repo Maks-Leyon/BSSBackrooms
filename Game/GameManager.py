@@ -7,6 +7,7 @@ from Game.Settings import *
 from Game.Note import Note
 
 class Game:
+    '''Ta klasa reprezentuje główną logikę gry, zarządza stanem gry, aktualizuje oraz rysuje wszystkie elementy na ekranie. Pobiera ona ekran (screen) oraz gracza (player) jako argumenty inicjalizacyjne.'''
     def __init__(self, screen, player):
         self.start = None # przy pierwszym ruchu zaczyna dopiero sie robic
         self.screen = screen

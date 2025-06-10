@@ -27,6 +27,7 @@ class Tile: #Dodałem TILE klasę żeby łatwiej używać a*
         return 10 * (distx + disty)
 
 class Map:
+    '''Ta zmienna statyczna przechowuje kafelki mapy, gdzie kluczem jest krotka z współrzędnymi (x, y), a wartością jest obiekt Tile.'''
     tiles = {
         (0, 0): Tile(0, 0)
     }

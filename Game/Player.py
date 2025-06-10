@@ -2,6 +2,7 @@ import pygame
 from Game.Settings import *
 
 class Player:
+    '''Ta klasa reprezentuje gracza w grze. Pobiera ona mapę gry (gamemap) jako argument inicjalizacyjny.'''
     def __init__(self, gamemap):
         self.start_x = 10 * TILE_SIZE + TILE_SIZE//2
         self.start_y = 15 * TILE_SIZE + TILE_SIZE//2

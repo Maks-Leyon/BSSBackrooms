@@ -6,6 +6,7 @@ from Game.Settings import TILE_SIZE
 
 
 class Pickup(Entity):
+    '''Ta klasa reprezentuje zbieralny przedmiot w grze. Dziedziczy po klasie Entity. Pobiera ona pozycję (pos), sprite przedmiotu (sprite) oraz numer przedmiotu (no) jako argumenty inicjalizacyjne.'''
     def __init__(self, pos, sprite, no):
         Entity.__init__(self, sprite,pos[0]* TILE_SIZE + TILE_SIZE // 2,pos[1]* TILE_SIZE + TILE_SIZE // 2,sprite.get_size())
         self.no = no

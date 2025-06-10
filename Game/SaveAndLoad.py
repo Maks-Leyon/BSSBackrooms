@@ -7,7 +7,7 @@ from Game.Db import db, GameInfo, PlayerInfo, EnemyInfo, NoteModel, WinInfo, Pic
 from Game.Note import Note
 
 class SaveAndLoad:
-
+    '''Ta klasa reprezentuje mechanizm zapisywania i wczytywania stanu gry. Używa bazy danych ORM do przechowywania informacji o grze, takich jak pozycja gracza, przeciwnika, zebrane notatki i czas gry.'''
     @staticmethod
     def saveGame(game):
         '''Metoda ta sluzy do zapisania danych gry w bazie ORM po calkowitym wyjsciu z aplikacji, zapisywane sa najwazniejsze informacje, w tym polozenie gracza, Enemy, obecna ilosc zebranych notatek, czy obecny czas, potrzebna jest ona do pozniejszego mozliwego wczytania gry'''
