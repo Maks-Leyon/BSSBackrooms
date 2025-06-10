@@ -1,7 +1,6 @@
 import pygame
-import numpy as np
 
-from Settings import *
+from Game.Settings import *
 
 class Tile: #Dodałem TILE klasę żeby łatwiej używać a*
     def __init__(self,x,y):

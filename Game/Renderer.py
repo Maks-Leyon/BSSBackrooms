@@ -4,7 +4,7 @@ import pygame
 # Biblioteka kompilacyjna, dzięki której mamy 10x więcej FPS pozdro i ktora jednoczesnie 2x wolniej laduje gre pozdro(jeden z dwoch jest przeciwnikiem i hejterem tej blbioitrki)
 from numba import njit
 
-from Settings import *
+from Game.Settings import *
 from Game.Map import Map
 
 NUM_RAYS = int(WIDTH / 4) #Resolution

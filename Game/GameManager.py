@@ -1,14 +1,10 @@
 import pygame
-import numpy as np
-from numba.core.imputils import for_iter
-from pygame.display import update
-
-from Enemy import Enemy
+from Game.Enemy import Enemy
 from Game.Pickup import Pickup
-from Map import Map
-from Renderer import Renderer, floor_casting, cast_ray
-from Settings import *
-from Note import Note
+from Game.Map import Map
+from Game.Renderer import Renderer, floor_casting, cast_ray
+from Game.Settings import *
+from Game.Note import Note
 
 class Game:
     def __init__(self, screen, player):

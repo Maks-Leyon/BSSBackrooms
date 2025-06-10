@@ -2,7 +2,6 @@ import pygame
 
 from Game.Settings import WHITE,RED
 from UI.Button import Button
-from Game import Settings
 
 class Menu:
     def __init__(self, screen):

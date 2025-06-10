@@ -2,11 +2,10 @@ import sys
 
 import pygame
 
-from Map import Map
-from Player import Player
-from Renderer import Renderer
-from StageManager import StageManager
-from SaveAndLoad import *
+from Game.Map import Map
+from Game.Player import Player
+from Game.StageManager import StageManager
+from Game.SaveAndLoad import *
 
 pygame.init()
 

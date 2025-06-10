@@ -1,8 +1,8 @@
 import pygame
 
-from Entity import Entity
-from Map import Map
-from Settings import TILE_SIZE
+from Game.Entity import Entity
+from Game.Map import Map
+from Game.Settings import TILE_SIZE
 
 
 class Pickup(Entity):

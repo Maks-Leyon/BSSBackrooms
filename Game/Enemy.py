@@ -1,6 +1,6 @@
-from Entity import Entity
-from Map import Map
-from Settings import *
+from Game.Entity import Entity
+from Game.Map import Map
+from Game.Settings import *
 
 class Enemy(Entity):
     def __init__(self, x, y, map_obj, sprite, mix):

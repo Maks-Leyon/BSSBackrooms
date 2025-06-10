@@ -1,5 +1,5 @@
 import pygame
-from UI import Button
+from UI.Button import Button
 from Game.Settings import *
 from Game.SaveAndLoad import *
 
@@ -18,7 +18,7 @@ class RealGameOver:
         x = screen.get_width() // 2 - 130
         y = 100
         self.buttons = [
-            Button.Button((x, y + 300, szer, wys), "Menu")
+            Button((x, y + 300, szer, wys), "Menu")
         ]
 
 

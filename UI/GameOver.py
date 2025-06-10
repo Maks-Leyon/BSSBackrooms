@@ -1,5 +1,5 @@
 import pygame
-from UI import Button
+from UI.Button import Button
 from Game.Settings import *
 from Game.SaveAndLoad import *
 
@@ -16,7 +16,7 @@ class GameOver:
         x = screen.get_width() // 2 - 130
         y = 100
         self.buttons = [
-            Button.Button((x + 50, y + 370, szer, wys), "Obecny")
+            Button((x + 50, y + 370, szer, wys), "Obecny")
         ]
 
         self.input_text = ""

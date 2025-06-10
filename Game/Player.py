@@ -1,6 +1,5 @@
 import pygame
-from Settings import *
-from Game.Map import Map
+from Game.Settings import *
 
 class Player:
     def __init__(self, gamemap):

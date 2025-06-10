@@ -1,7 +1,7 @@
 import pygame
-from Entity import Entity
-from Map import Map
-from Settings import *
+from Game.Entity import Entity
+from Game.Map import Map
+from Game.Settings import *
 
 class Note(Entity):
     count = 0

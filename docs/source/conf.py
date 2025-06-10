@@ -8,20 +8,21 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('C:/Users/mmiks/PycharmProjects/PythonBackrooms'))
+sys.path.insert(0, os.path.abspath('../..'))
 
-project = 'Projekt najlepszych przyjaciol'
-copyright = '2025, Mikolaj i Maks'
-author = 'Mikolaj i Maks'
-release = '1.0'
+project = 'Projekt Najlepszych Przyjaciol'
+copyright = '2025, Mikolaj & Maks'
+author = 'Mikolaj & Maks'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
+extensions = [
+    'sphinx.ext.autodoc',      # The core extension to pull docs from your code.
+    'sphinx.ext.viewcode',     # Adds a handy "[source]" link next to your docs.
+    'sphinx.ext.napoleon',     # Lets you use easy-to-read docstring styles.
 ]
-
 templates_path = ['_templates']
 exclude_patterns = []
 
@@ -30,5 +31,5 @@ language = 'pl'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']

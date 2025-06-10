@@ -3,9 +3,9 @@ import json
 import pygame.time
 from peewee import DoesNotExist
 
-from Db import db, GameInfo, PlayerInfo, EnemyInfo, NoteModel, WinInfo, PickupModel
+from Game.Db import db, GameInfo, PlayerInfo, EnemyInfo, NoteModel, WinInfo, PickupModel
+from Game.Note import Note
 
-from Note import Note
 class SaveAndLoad:
 
     @staticmethod

@@ -1,9 +1,8 @@
 import pygame
-import sys
-from GameManager import Game
+from Game.GameManager import Game
 from UI.Menu import Menu
 from UI.Options import Options
-from SaveAndLoad import *
+from Game.SaveAndLoad import *
 from UI.GameOver import GameOver
 from UI.HowToPlay import HowToPlay
 from UI.GameStart import GameStart
@@ -106,7 +105,6 @@ class StageManager:
             elif action == "Exit":
                 SaveAndLoad.saveGame(self.game)
                 pygame.quit()
-                sys.exit()
 
         elif self.stage == "game_start":
             action = self.game_start.update(events)

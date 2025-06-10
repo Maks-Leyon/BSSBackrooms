@@ -4,7 +4,6 @@ import pygame
 from Game.Settings import HALF_HEIGHT, HALF_WIDTH, WHITE, WIDTH
 from UI.Button import Button
 from UI.Slider import Slider
-from Game import Settings
 
 class Options:
     def __init__(self,screen, player):
@@ -26,7 +25,6 @@ class Options:
                          Button((self.screen.get_width() // 2 - 250 // 2 - 265, 200 + 340, 120, 50), "Back")
                          ]
 
-    #USELSS XDDDDDDDDDDDDDDDDDDDDDD
     def creepZursynowa(self):
         self.player.music = 1
     def maksPalkowskiMaPowiazaniaZFederacjaRosyjska(self):
