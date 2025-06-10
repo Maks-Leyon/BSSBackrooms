@@ -1,7 +1,7 @@
 .. Projekt Najlepszych Przyjaciol documentation master file, created by
    sphinx-quickstart on Tue Jun 10 17:44:35 2025.
    You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   contain the root `toctree` directive.awwadaw
 
 Projekt Najlepszych Przyjaciol documentation
 ============================================

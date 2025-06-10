@@ -3,10 +3,12 @@ from peewee import *
 db = SqliteDatabase('game_data.db')
 
 class BaseModel(Model):
+    '''Klasa bazowa dla wszystkich modeli w bazie danych.'''
     class Meta:
         database = db
 
 class PlayerInfo(BaseModel):
+    '''Klasa ta reprezentuje informacje o graczu.'''
     x = FloatField()
     y = FloatField()
     rotationSpeed = FloatField()
