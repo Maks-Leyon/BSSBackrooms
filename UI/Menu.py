@@ -23,6 +23,7 @@ class Menu:
         self.fontAuthors = pygame.font.Font("Assets/Fonts/AlumniSansSC-Italic.ttf",30)
 
     def update(self, events):
+        '''Metoda ta odpowaida za aktualizacje guzikow czy sprawdzenia pozycji myszki w głównym Meny'''
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
 
@@ -41,6 +42,7 @@ class Menu:
         return None
 
     def draw(self):
+        '''Metoda ta odpowiada za rysowanie ekranu Menu głównego, rysuje rowniez guziki ktore dostarczaja inne okna'''
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.back, (0,0))
         title_surf = self.font.render("BSS Backrooms", True, WHITE)

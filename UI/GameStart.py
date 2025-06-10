@@ -24,6 +24,7 @@ class GameStart:
         ]
 
     def update(self, events):
+        '''Metoda ta odpowaida za aktualizacje guzikow czy sprawdzenia pozycji myszki w głównym oknie startu Gry (UI)'''
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
 
@@ -48,6 +49,7 @@ class GameStart:
         return "game_start"
 
     def draw(self):
+        '''Metoda ta odpowaida za rysowanie ekranu MENU gry'''
         self.screen.fill((0, 0, 0))
         offset = 200
         self.screen.blit(self.back, (offset, 0))

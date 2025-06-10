@@ -10,6 +10,7 @@ class SaveAndLoad:
 
     @staticmethod
     def saveGame(game):
+        '''Metoda ta sluzy do zapisania danych gry w bazie ORM po calkowitym wyjsciu z aplikacji, zapisywane sa najwazniejsze informacje, w tym polozenie gracza, Enemy, obecna ilosc zebranych notatek, czy obecny czas, potrzebna jest ona do pozniejszego mozliwego wczytania gry'''
         #operacje atomowe, by w razie bledu nastapil rollback wszystkich danych
         with db.atomic():
             #Usuwamy wszystkie dane dotyczace ostatniego zapisu
@@ -67,6 +68,7 @@ class SaveAndLoad:
 
     @staticmethod
     def loadGame(game):
+        '''Metoda ta sluzy do odtworzenia danych zapisanych metoda SaveGame z bazy ORM, by gracz mogl rozpoczac rozgrywke od momentu zamkniecia gry'''
         #try w razie jakby to byla pierwsza gra i nie ma zapisanych plikow
         try:
             # powinno wystarczyc get bez warunku zadnego bo i tak jest jeden rekord
@@ -140,6 +142,7 @@ class SaveAndLoad:
 
     @staticmethod
     def saveInfo(nick,elapsed_time):
+        '''Metoda ta odpowiada za zapisywanie informacji o graczu, ktory ukonczyl gre w Bazie ORM, zapisywany jest jego nick oraz czas w jakim ukonczyl gre'''
         with db.atomic():
             WinInfo.create(
                 time = elapsed_time,
@@ -148,6 +151,7 @@ class SaveAndLoad:
 
     @staticmethod
     def loadInfo():
+        '''Metoda ta odpowiada za odczytywanie informacji z bazy danych ORM, wykorzystywana jest w klasie Ranking w ktorej wizualnie odtwarzane sa informacje o najlepszych graczach'''
         players = []
         #limit 5 dla 5 najlepszych
         for info in WinInfo.select().order_by(WinInfo.time.asc()).limit(5):

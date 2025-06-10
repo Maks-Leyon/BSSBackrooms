@@ -27,75 +27,10 @@ class StageManager:
 
         self.need_reset = False # potrzebny przy gameover
 
-    '''def update(self, events, clock):
-        if self.stage == "Menu":
-           # print("MENU")
 
-            action = self.menu.update(events)
-            if action == "Start":
-                pygame.mixer.Channel(0).set_volume(0.5)
-                if self.need_reset:
-                    self.game.reset()
-                    self.need_reset = False
-                self.stage = "game_start"
-            elif action == "Options":
-                self.stage = "options"
-            elif action == "Load":
-                SaveAndLoad.loadGame(self.game)
-                self.stage = "game"
-
-            elif action == "Exit":
-                SaveAndLoad.saveGame(self.game)
-                pygame.quit()
-                sys.exit()
-
-        elif self.stage == "game":
-
-            new_stage = self.game.update(events, clock)
-            if new_stage == "gameover":
-                self.gameover = GameOver(self.screen, self.game.elapsed_time)
-                self.stage = "gameover"
-            self.stage = new_stage
-
-        elif self.stage == "gameover":
-            print("gameover")
-            new_stage = self.gameover.update(events)
-            if new_stage == "Menu":
-                self.need_reset = True
-            self.stage = new_stage
-
-
-
-
-        elif self.stage == "options":
-            result = self.options.update(events)  # result to np. "Creepy", "Szczescie", "Gorycz", "menu" lub "options"
-            if result == "how_to_play":
-                self.stage = "how_to_play"
-
-
-            if result == "Creepy":
-                self.player.music = 1
-                self.stage = "options"
-            elif result == "Przyjaciele":
-                self.player.music = 2
-                self.stage = "options"
-            elif result == "Femboye":
-                self.player.music = 3
-                self.stage = "options"
-            elif result == "ASD":
-                self.player.music = 4
-                self.stage = "options"
-            elif result == "menu":
-                self.stage = "menu"
-            else:
-                self.stage = result
-
-        elif self.stage == "how_to_play":
-            res = self.how_to_play.update(events)
-            if res == "options":
-                self.stage = "options"'''
 
     def update(self, events, clock):
+        '''Metoda ta jest odpowiedzialana za zarzadzanie stanem gry, odpowiada za zarządzanie obecnym stanem gry i odpowiada za przejscia miedzy roznymi stanami gry'''
         if self.stage == "Menu":
             action = self.menu.update(events)
             if action == "Start":

@@ -31,6 +31,7 @@ class RealGameOver:
 
 
     def update(self, events):
+        '''Metoda ta odpowaida za aktualizacje guzikow czy sprawdzenia pozycji myszki'''
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
 
@@ -57,7 +58,7 @@ class RealGameOver:
         return "gameLose"
 
     def draw(self):
-        '''AGHAFRASDFADSFSDAFADFDAFASD'''
+        '''Metoda ta odpowiada za rysowanie ekranu po przegranej grze, w tym zegara, notatki oraz tekstur'''
         self.screen.fill((0, 0, 0))
 
         note_bg_scaled = pygame.transform.scale(self.note_bg, (self.screen.get_width(), self.screen.get_height()))

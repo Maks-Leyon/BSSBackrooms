@@ -16,6 +16,7 @@ class Ranking:
         ]
 
     def update(self, events):
+        '''Metoda ta odpowaida za aktualizacje guzikow czy sprawdzenia pozycji myszki, rowniez odpowiada za uzywanie Slidera'''
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
         for button in self.buttons:
@@ -33,6 +34,7 @@ class Ranking:
         return "ranking"
 
     def draw(self):
+        '''Metoda ta odpowida za rysowanie ekranu najlepszych graczy, uzywana do tego jest metoda statyczna z klasy SaveAndLoad'''
         self.screen.fill((0, 0, 0))
         label = self.font.render("Biggest Goats", True, WHITE)
         self.screen.blit(label, (200, 20))
