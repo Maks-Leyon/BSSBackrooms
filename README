@@ -1,0 +1,20 @@
+=================================================
+GRA BSS OPARTA NA FAKTACH NAJLEPSZYCH PRZYJACIOL
+=================================================
+
+Do pełenj funkcjonalnosci gry wymagana jest instalacja konkrentych bilbiotek, można to zrobić za pomocą komendy niżej w głównym katalogu projektu:
+
+pip install sphinx pygame numba numpy peewee
+
+
+
+Do utworzenia pliku index.html wymagane jest przejście z katalogu głównego do katalogu docs :
+
+cd docs
+
+By wywołać plik index.html w terminalu w katalogu docs trzeba wpisać :
+
+./make.bat html
+
+Plik index.html znajdzie sie w Docs > build > html
+
