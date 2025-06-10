@@ -5,6 +5,7 @@ from Game.SaveAndLoad import *
 
 class RealGameOver:
     def __init__(self, screen,elapsed_time):
+        '''AGHAFRASDFADSFSDAFADFDAFASD'''
 
         self.screen = screen
 
