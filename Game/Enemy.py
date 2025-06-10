@@ -16,6 +16,7 @@ class Enemy(Entity):
         self.start_chase =  False #dopki gracz sie nie ruszy on tez nie
 
     def reset(self):
+        '''Metoda resetujaca przeciwnika do stanu poczatkowego'''
         self.x = self.start_x
         self.y = self.start_y
         self.stamina = 650
@@ -24,6 +25,7 @@ class Enemy(Entity):
 
     #aktualna pozycja przceiwnika
     def current_tile(self):
+        '''Metoda zwracajaca aktualne koordynaty mapowe Tile na ktorym stoi przeciwnik'''
         return int(self.x // TILE_SIZE), int(self.y // TILE_SIZE)
     #to samo co w graczu, zeby indeksowac na tablicy a nie na piksleach
 
@@ -35,11 +37,12 @@ class Enemy(Entity):
     # odelglsoc Manhattana, o tyle lepsza ze dziaal na poruszasnie sie TEORETYCZNIE
     #w pionie i poziomie, nie bedzzie szedl po przekatnej, euklidesowa przechodzila mi na przekatnej wiec zmienilem
     def SpidermanDistance(self, a, b):
-        '''IDK W SUMIE POZDRO ZO'''
+        '''Metoda zwracajaca dystans pomiedzy dwoma punktami a i b za pomoca dystansu Manhattana'''
         return abs(a[0]-b[0]) + abs(a[1]-b[1])
 
     #boze jak ja kocham astar
     def astar(self, playerpos):
+        '''Metoda implementujaca algorytm A*, która zwraca sciezkę od obiektu Enemy do obiektu Tile na podanej pozycji mapowej (playerpos)'''
         start_tile = Map.get_tile(self.current_tile()) #poczatkowy tile (na ktorym stoi gruby)
         target_tile = Map.get_tile(playerpos) # tile gracza
         opent = [] #lista tile'ow do odwiedzenia
@@ -81,6 +84,7 @@ class Enemy(Entity):
                         opent.append(tile)
 
     def teleport(self):
+        '''Metoda teleportująca obiekt Enemy na przeciwny róg mapy'''
         ct = Map.get_tile(self.current_tile())
         if ct.x < 9:
             self.x = 16 * TILE_SIZE + TILE_SIZE // 2
@@ -92,6 +96,7 @@ class Enemy(Entity):
             self.y = 1 * TILE_SIZE + TILE_SIZE // 2
 
     def update(self, player):
+        '''Metoda aktualizująca stan obiektu Enemy, w tym jego pozycję, szybkość, dźwięk i ścieżkę na podstawie danych gracza (player)'''
         if self.start_chase:
             player_tile = (int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) #pozycja gracza caly czas zeby mogl skedzic jak chciales
             current = self.current_tile() # aktual pozycja przeciwnika
@@ -137,9 +142,6 @@ class Enemy(Entity):
                     self.x += (dx / dist) * self.speed
                     self.y += (dy / dist) * self.speed
 
-
-            # trzeba wykminic i dodac tak jak pisalem wyzej implemetnacje w tym miejscu co sie dzieej jak gracz i gruby stoja na tym samym poly
-
             #print(f"Enemy pozcyja: x={self.x:.1f}, y={self.y:.1f}, tile={self.current_tile()}")
             #print(f"Gruby: ({self.x//TILE_SIZE},{self.y//TILE_SIZE})")
-            print(f"Gruby: (speed={self.speed:.2f}, stamina={self.stamina}), distance={Entity.distance_to_player(self, player.x, player.y):.2f})")
+            #print(f"Gruby: (speed={self.speed:.2f}, stamina={self.stamina}), distance={Entity.distance_to_player(self, player.x, player.y):.2f})")

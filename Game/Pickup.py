@@ -13,6 +13,7 @@ class Pickup(Entity):
         self.collected = False
 
     def effect(self, player):
+        '''Metoaa ta aktualizuje stan zdrowia gracza (player) oraz wywoł€je dźwięk jeśli jest to niemożliwe.'''
         h = player.hp
         if h >= 3:
             pygame.mixer.Channel(2).play(pygame.mixer.Sound("Assets/Sounds/error.wav"))
@@ -21,6 +22,7 @@ class Pickup(Entity):
         player.hp = min(h+1, 3)
 
     def update(self, player, keys):
+        '''Metoda ta aktualizuje stan zbieralnego przedmiotu, sprawdzając, czy został zebrany. Jeśli gracz (player) znajduje się na tym samym kafelku co przedmiot i naciśnie klawisz E, wywoływana jest metoda effect, która aktualizuje stan zdrowia gracza. Naciśnięte klawisze są przekazywane jako argument (keys).'''
         if self.collected:
             return
         if Map.get_tile(player.pos) == Map.get_tile(self.pos):

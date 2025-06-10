@@ -68,6 +68,7 @@ class Game:
         pygame.mixer.Channel(1).set_volume(0.0)
 
     def reset(self):
+        '''Metoda ta resetuje stan gry oraz przywraca domyślne wartości'''
         self.start = None
         self.paused_time = None
         self.renderer.wall_texture = pygame.image.load("Assets/Textures/servergray.png").convert()
@@ -118,6 +119,7 @@ class Game:
 
 
     def update(self, events, fps):
+        '''Metoda ta aktualizuje stan gry, w tym pozycję gracza, przeciwnika, notatek i pickupów,'''
         if self.start is None:  #dopoki gracz sie nie ruszy
             keys = pygame.key.get_pressed()
             if keys[pygame.K_w] or keys[pygame.K_s]:
@@ -139,9 +141,6 @@ class Game:
             self.reset()
             self.gg = False
             return "gameLose"
-
-
-
 
         pygame.mixer.Channel(0).set_volume(0.5)
 
@@ -229,6 +228,7 @@ class Game:
         return "game"
 
     def update_level(self, lvl):
+        '''Metoda ta aktualizuje poziom gry, zmienia mapę, przeciwnika, notatki i pickupy w zależności od poziomu (lvl)'''
         print("ROBIE UPDATE LVL")
         if lvl == 2:
             print("ROBIE LVL 2")
@@ -268,6 +268,7 @@ class Game:
 
     # ta metodo jest po to zeby wyseiwtlic sprite wroga na ekrani jako jumpscare i powoli go zanikac
     def flash_jumpscare(self):
+        '''Metoda ta wyświetla sprite przeciwnika na ekranie jako jumpscare i stopniowo go zanika'''
         if self.jumpscare_fadeout < 1:
             return
         spsurf = pygame.transform.scale(self.enemy.sprite, (WIDTH, HEIGHT)).convert_alpha()
@@ -277,6 +278,7 @@ class Game:
         pygame.display.flip()
 
     def draw_info(self):
+        '''Metoda ta rysuje informacje o grze, takie jak prędkość obrotu gracza, czas gry, życie, licznik notatek i pasek staminy'''
         for n in self.notes:
             if n.open_note:
                 return
@@ -306,13 +308,14 @@ class Game:
         self.screen.blit(spsurf, (WIDTH * 0.2, HEIGHT * 0.9))
 
     def change_music(self, music_file):
+        '''Metoda ta zmienia aktualną muzykę w grze na podany plik muzyczny (music_file)'''
 
         pygame.mixer.Channel(0).play(pygame.mixer.Sound(music_file),-1)
         pygame.mixer.Channel(0).set_volume(0.5)
 
 
     def draw(self):
-
+        '''Metoda ta rysuje wszystkie elementy gry na ekranie, w tym tło, ściany, przeciwnika, notatki i pickupy'''
 
         self.renderer.frame = floor_casting(self.renderer.frame, self.renderer.floorimage)
         surf = pygame.surfarray.make_surface(self.renderer.frame * 255)

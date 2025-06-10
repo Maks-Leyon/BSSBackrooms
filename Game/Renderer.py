@@ -24,6 +24,7 @@ Map = Map()
 # poza klasą bo i tak dostarczamy wszyskto oddzielnie od klasy
 @njit()
 def floor_casting(frame, floorimage):
+    '''Metoda ta tworzy efekt podłogi oraz nieba, przyciemniając je w zależności od wysokości.'''
     # Przez każdy horyzontalny promień
     for ray in range(NUM_RAYS):
         # Przez połowę wertykalnych promieni
@@ -40,6 +41,7 @@ def floor_casting(frame, floorimage):
 #Podzieliłem castowanie promieni na sam cast promienia, który zachowuje
 @njit()
 def cast_ray(px, py, angle, game_map):
+    '''Metoda ta wykonuje rzut promienia od pozycji gracza (px, py) w zależności od początkowego kąta patrzenia gracza (angle) na mapie gry (game_map). Zwraca bufor z odległościami do trafionych obiektów.'''
     cur_angle = angle - FOV / 2 #Zaczynamy z lewej strony FOV
 
     #To jest buffer, który zapamięta odległość (z axis) od gracza każdego trafionego obiektu
@@ -76,6 +78,7 @@ class Renderer:
         self.texture_height = self.wall_texture.get_height()
 
     def draw_walls(self, sc, z_buffer, player_angle, px, py):
+        '''Metoda ta rysuje ściany w grze, korzystając z bufora z_buffer, kąta widzenia gracza (player_angle) oraz pozycji gracza (px, py). Wycina ona kawałek tekstury na podstawie współrzędnych ściany, w którą trafił promień.'''
         cur_angle = player_angle - FOV / 2  # Zaczynamy z lewej strony FOV
 
         for ray in range(NUM_RAYS):  # Dla każdego promienia
@@ -148,6 +151,7 @@ class Renderer:
 
     # Metoda do rysowania dowolnego sprit'ea na danej pozycji (spx i spy to x i y tego sprite)
     def draw_sprite(self, screen, sprite, spx, spy, spsize, px, py, pangle, z_buffer, pg):
+        '''Metoda ta rysuje sprite na ekranie (screen) w zależności od jego pozycji (spx, spy), rozmiaru (spsize), pozycji gracza (px, py) i kąta widzenia gracza (pangle). Jest on rysowany jako wycinki, które nie są renderowane jeśli ich odległość jest większa niż punkt trafienia promienia. Sprite jest przyciemniany wraz z odległością od pozycji gracza.'''
         # Tutaj zamieniamy jego x i y w postaci pozycji na mapie na pozycje pikselowe, + TILE_SIZE //2 zeby byl na srodku tile'a
         sprite_x = spx * TILE_SIZE
         sprite_y = spy * TILE_SIZE

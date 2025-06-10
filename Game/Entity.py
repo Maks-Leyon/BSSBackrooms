@@ -6,4 +6,5 @@ class Entity:
         self.size = size
 
     def distance_to_player(self, px, py):
+        '''Metoda ta zwraca dystans do podanych koordynatów px, py za pomocą wzoru Euklidesowego'''
         return ((self.x - px) ** 2 + (self.y - py) ** 2) ** 0.5

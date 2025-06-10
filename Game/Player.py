@@ -18,6 +18,7 @@ class Player:
         self.stamina = 300
 
     def reset(self):
+        '''Metoda ta resetuje pozycję gracza do pozycji startowej, ustawia kąt na wartość początkową, prędkość na wartość początkową, a także przywraca zdrowie i wytrzymałość do wartości początkowych.'''
         self.x = self.start_x
         self.y = self.start_y
         self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)
@@ -31,7 +32,7 @@ class Player:
     # Na necie przeczytalem ze jak pomnozysz przez clock.tick() to wtedy masz szybkosc niezależną od fps wiec nie bedzie
     # np. roznych szybkosci na lepszych/gorszych kompach
     def move(self,keys, framerate):
-
+        '''Metoda ta aktualizuje pozycję gracza na podstawie naciśniętych klawiszy. Jeśli klawisz SHIFT jest wciśnięty, gracz może biec, a jego prędkość jest zwiększana, jeśli ma wystarczającą staminę. Jeśli klawisz SHIFT nie jest wciśnięty, stamina gracza jest stopniowo odnawiana. Kąt obrotu gracza jest również aktualizowany na podstawie naciśniętych klawiszy (keys). Wszystkie wartości są aktualizowane na podstawie liczby klatek na sekundę (framerate)'''
         dx = 0
         dy = 0
 
@@ -75,6 +76,7 @@ class Player:
         self.pos = (self.x // TILE_SIZE, self.y // TILE_SIZE)
 
     def take_damage(self):
+        '''Metoda ta aktualizuje stan zdrowia gracza, zmniejszając go o 1. Jeśli zdrowie gracza spadnie do 0 lub poniżej, zwraca True, co oznacza, że gracz został pokonany. W przeciwnym razie zwraca False.'''
         self.hp -= 1
         if self.hp <= 0:
             return True

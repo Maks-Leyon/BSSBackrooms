@@ -19,11 +19,8 @@ class Note(Entity):
         self.open_note = False
         Note.total_notes +=1
 
-    '''def reset(self):
-        Note.total_notes = 0'''
-
-
     def draw(self, screen):
+        '''Metoda ta rysuje notatkę, w tym jej tło i tekst na ekranie (screen), jeśli jest otwarta.'''
         if self.open_note:
             #srcalpha pozwala na przezroczystosc, gratulacje
             blak = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
@@ -43,12 +40,14 @@ class Note(Entity):
 
     #co za gowno , font nie obsluguje /n
     def draw_multiline_text(self,screen, text, x, y, font, color, line_spacing=5):
+        '''Metoda ta rysuje wieloliniowy tekst na ekranie (screen) w podanej pozycji (x, y) z użyciem podanego fontu (font) i koloru (color). Odległość między liniami można dostosować za pomocą parametru line_spacing.'''
         lines = text.split('\n')
         for i, line in enumerate(lines):
             line_surf = font.render(line, True, color)
             screen.blit(line_surf, (x, y + i * (font.get_height() + line_spacing)))
 
     def update(self,player_pos, keys, ev):
+        '''Metoda ta aktualizuje stan notatki, sprawdzając, czy została zebrana lub otwarta. Jeśli notatka jest otwarta, reaguje na naciśnięcie spacji, aby ją zamknąć. Jeśli gracz znajduje się na tym samym kafelku co notatka (player_pos) i naciśnie klawisz E, notatka zostanie otwarta. Naciśnięte klawisze i ewenty są przekazywane jako argumenty (keys, ev).'''
         if self.collected:
             return
         if self.open_note:
@@ -66,10 +65,12 @@ class Note(Entity):
         #dodatkowa by wyswietlac na ekranie liczbe aktualnie zebranyuch, taki getter
     @classmethod
     def get_counter_text(cls):
+        '''Metoda ta zwraca tekst z liczbą zebranych notatek i całkowitą liczbą notatek.'''
         return f"Zebrane: {Note.count}/{Note.total_notes}"
 
     @classmethod
     def show_notes(cls, notes, keys, ev):
+        '''Metoda ta obsługuje wyświetlanie notatek. Jeśli notatki są otwarte, reaguje na naciśnięcia klawiszy strzałek w lewo i w prawo, aby przełączać między notatkami, oraz na spację, aby je zamknąć. Jeśli naciśnięto klawisz N, otwiera wszystkie zebrane notatki. Naciśnięte klawisze i ewenty są przekazywane jako argumenty (keys, ev).'''
         if Note.open_notes:
             for e in ev:
                 if e.type == pygame.KEYDOWN:

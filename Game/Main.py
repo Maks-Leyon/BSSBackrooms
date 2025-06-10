@@ -10,6 +10,7 @@ from Game.SaveAndLoad import *
 pygame.init()
 
 def Main():
+    '''Metoda ta inicializuje grę, tworzy ekran, gracza, mapę i menedżera etapu, a następnie rozpoczyna główną pętlę gry.'''
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
     pygame.display.set_caption("Miki i Maksiu <333333")
