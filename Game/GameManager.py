@@ -73,7 +73,8 @@ class Game:
 
     def reset(self):
         self.start = None
-        self.renderer.wall_texture = self.py.image.load("Assets/Textures/servergray.png").convert()
+        self.paused_time = None
+        self.renderer.wall_texture = pygame.image.load("Assets/Textures/servergray.png").convert()
         pygame.mixer.Channel(0).set_volume(0.0) # nie stopuj, tylko wyciszaj
         pygame.mixer.Channel(1).set_volume(0.0)
         self.min = 0

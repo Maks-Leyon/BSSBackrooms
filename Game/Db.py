@@ -1,7 +1,5 @@
 from peewee import *
 
-
-#BAZA DANYCH - MEGA EZ, MODELE JAKO KLASY, PO PROSTU ZAPISUJE DANE
 db = SqliteDatabase('game_data.db')
 
 class BaseModel(Model):
