@@ -2,6 +2,7 @@ import pygame
 from Game.Settings import  *
 
 class Slider:
+    '''Ta klasa reprezentuje Slider widoczny w klasei Options, jako argumenty inicjalizacyjne pobiera pozycje x,y, size (jako krotke okreslajaca szerokosc i wysokosc slidera), val - poczatkowa wartosc suwaka, min oraz max - wartosci jakie minimalne i maksymalne moze przyjac '''
     def __init__(self, x, y, size : tuple, val : float, min_val : float, max_val : float):
         self.x = x
         self.y = y# to tuple bo ustawiam srodek ekranu (Hal_WIDTH i HALF_HEIGHT)

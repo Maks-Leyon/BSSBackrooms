@@ -5,6 +5,7 @@ from UI.Button import Button
 
 class Menu:
     def __init__(self, screen):
+        '''Ta klasa reprezentuje Menu Głowne gry, pobiera ona ekran (screen) jako argumenty inicjalizacyjne'''
         self.screen = screen
         self.szer, self.wys = 250, 60
         self.x = self.screen.get_width() // 2 - self.szer // 2  # Wyśrodkowanie buttonow

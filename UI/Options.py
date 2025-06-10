@@ -6,6 +6,7 @@ from UI.Button import Button
 from UI.Slider import Slider
 
 class Options:
+    '''Ta klasa reprezentuje Opcje gry ( Settings ), pobiera ona ekran (screen) oraz gracza (player) jako argumenty inicjalizacyjne'''
     def __init__(self,screen, player):
         self.screen = screen
         self.player = player

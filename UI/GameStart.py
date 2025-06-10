@@ -4,6 +4,7 @@ from Game.Settings import *
 from UI.Button import Button
 
 class GameStart:
+    '''Ta klasa reprezentuje Menu Gry, pobiera ona ekran (screen) jako argumenty inicjalizacyjne'''
     def __init__(self, screen):
         self.screen = screen
         self.szer, self.wys = 250, 60

@@ -4,6 +4,7 @@ from Game.Settings import *
 from Game.SaveAndLoad import *
 
 class GameOver:
+    '''Ta klasa reprezentuje Ekran po wygraniu gry, pobiera ona ekran (screen) oraz czas ukoczenia gry(elapsed_time) jako argumenty inicjalizacyjne'''
     def __init__(self, screen,elapsed_time):
 
         self.screen = screen
