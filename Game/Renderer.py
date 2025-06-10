@@ -68,6 +68,7 @@ def cast_ray(px, py, angle, game_map):
     return z_buffer # zwracamy buffer
 
 class Renderer:
+    '''Ta klasa reprezentuje obiekt renderujący elementy gry. Pobiera ona instancję Pygame (py) jako argument inicjalizacyjny.'''
     def __init__(self, py):
         self.py = py
         self.frame = np.random.uniform(0,1, (NUM_RAYS, VRESOLUTION*2, 3))

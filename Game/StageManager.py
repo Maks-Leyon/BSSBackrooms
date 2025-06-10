@@ -10,6 +10,7 @@ from UI.Ranking import Ranking
 from UI.RealGameOver import RealGameOver
 
 class StageManager:
+    '''Ta klasa reprezentuje menedżera stanu gry, który zarządza przechodzeniem między różnymi stanami gry. Pobiera ona ekran (screen), gracza (player) oraz mapę gry (gamemap) jako argumenty inicjalizacyjne.'''
     def __init__(self, screen, player, gamemap):
         self.screen = screen
         self.player = player

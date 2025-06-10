@@ -1,4 +1,5 @@
 class Entity:
+    '''Ta klasa reprezentuje obiekt w grze, który posiada pozycję (x, y), graficzną reprezentację (sprite) oraz rozmiar (size).'''
     def __init__(self,sprite, x, y, size):
         self.sprite = sprite
         self.x = x

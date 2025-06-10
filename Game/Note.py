@@ -4,11 +4,17 @@ from Game.Map import Map
 from Game.Settings import *
 
 class Note(Entity):
+    '''Ta klasa reprezentuje notatkę w grze. Dziedziczy po klasie Entity i zawiera metody do rysowania, aktualizacji stanu notatki oraz zarządzania liczbą zebranych notatek. Pobiera ona pozycję (pos), tekst notatki (note), sprite notatki (sprite), jej czcionkę (font) oraz numer notatki (no) jako argumenty inicjalizacyjne.'''
     count = 0
+    '''Ta zmienna statyczna przechowuje liczbę zebranych notatek.'''
     open_notes = False
+    '''Ta zmienna statyczna określa czy jakaś notatka jest otwarta.'''
     note_index = 0
+    '''Ta zmienna statyczna przechowuje indeks aktualnie wyświetlanej notatki.'''
     notes_to_show = []
+    '''Ta zmienna statyczna przechowuje listę notatek do wyświetlenia.'''
     total_notes = 0 # zmienna do get _couner
+    '''Ta zmienna statyczna przechowuje całkowitą liczbę zebranych notatek w grze.'''
     def __init__(self,pos,note,sprite,font,no):
         Entity.__init__(self,sprite,pos[0]* TILE_SIZE + TILE_SIZE // 2,pos[1]* TILE_SIZE + TILE_SIZE // 2,sprite.get_size())
         self.font = font
