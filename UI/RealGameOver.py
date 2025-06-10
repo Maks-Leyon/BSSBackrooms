@@ -5,7 +5,7 @@ from Game.SaveAndLoad import *
 
 class RealGameOver:
     def __init__(self, screen,elapsed_time):
-        '''AGHAFRASDFADSFSDAFADFDAFASD'''
+
 
         self.screen = screen
 
@@ -57,6 +57,7 @@ class RealGameOver:
         return "gameLose"
 
     def draw(self):
+        '''AGHAFRASDFADSFSDAFADFDAFASD'''
         self.screen.fill((0, 0, 0))
 
         note_bg_scaled = pygame.transform.scale(self.note_bg, (self.screen.get_width(), self.screen.get_height()))
