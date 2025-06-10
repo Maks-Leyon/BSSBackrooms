@@ -15,6 +15,7 @@ class HowToPlay:
         ]
 
     def update(self, events):
+        '''Metoda ta odpowaida za aktualizacje guzika czy sprawdzenia pozycji myszki w Dodatkowym oknie options'''
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
         for button in self.buttons:
@@ -32,6 +33,7 @@ class HowToPlay:
         return "how_to_play"
 
     def draw(self):
+        '''Metoda ta odpowiada za rysowanie ekranu sterowania'''
         self.screen.fill((0, 0, 0))
         instructions_text = [
             "Sterowanie:",

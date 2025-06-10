@@ -20,6 +20,7 @@ class Slider:
         self.button_rect = pygame.Rect(self.slider_left_pos + self.val - 5, self.slider_top_pos, 10, self.size[1])
 
     def move(self, mouse_pos):
+        '''Metoda ta odpowiada za aktualizowanie sie widoczengo slidera, gdy uzytkownik go przeciaga'''
         new_x = mouse_pos[0] # pozycja na podstawie osi x nowa
         #ograncizenie za lewy a nizej za prawy
         if new_x < self.slider_left_pos:
@@ -30,12 +31,14 @@ class Slider:
         self.val = new_x # update
 
     def get_val(self):
+        '''Metoda ta odpowiada za zmiane wartosci z pikseli na liczbowe'''
         val_range = self.slider_right_pos - self.slider_left_pos # calokowity zakres
         button_val = self.button_rect.centerx - self.slider_left_pos # odleglosc od lewej, centerx pozycja w poziomie
 
         return (button_val/val_range) *(self.max - self.min) + self.min # wartiosc jako proporcja odleglosci
 
     def render(self,screen):
+        '''Metoda ta odpowiada za renderowanie elementow suwaka'''
         pygame.draw.rect(screen, GRAY, self.container_rect)
         pygame.draw.rect(screen, RED, self.button_rect)
 

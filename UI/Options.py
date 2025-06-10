@@ -26,16 +26,19 @@ class Options:
                          ]
 
     def creepZursynowa(self):
-        self.player.music = 1
+        '''Metoda ta odpowiada za nic'''
+
     def maksPalkowskiMaPowiazaniaZFederacjaRosyjska(self):
-        self.player.music = 2
+        '''Metoda ta odpowiada również za nic'''
+
     def NiktNieLubiKubyPawlika(self):
-        '''KAZDY KOCHA KUBE PAWLIKA'''
-        self.player.music = 3
+        '''A to jest akurat prawda'''
+
 
 
 
     def update(self, events):
+        '''Metoda ta odpowaida za aktualizacje guzikow czy sprawdzenia pozycji myszki, rowniez odpowiada za uzywanie Slidera'''
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
 
@@ -66,6 +69,7 @@ class Options:
 
 
     def draw(self):
+        '''Metoda ta odpowiada za rysowanie ekranu Opcji'''
         label = self.font.render("Czułość obrotu",True, WHITE)
         label2 = self.font.render("Muzyka w grze", True, WHITE)
         self.screen.fill((0, 0, 0))

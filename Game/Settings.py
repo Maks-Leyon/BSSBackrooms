@@ -1,6 +1,8 @@
 import math
 import numpy as np
-'''GÓWNO'''
+def Opis():
+    '''Klasa ta przechowuje wszystkie konkrente informacje w naszej grze ala "Magazyn" przechowujemy tutaj nazwy kolorow RGB, mapy dla poziomow, czy konkretne wartosci dla Tile'''
+    pass
 #colors
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
