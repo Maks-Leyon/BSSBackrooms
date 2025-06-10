@@ -2,6 +2,7 @@ import pygame
 from Game.Settings import *
 
 class Button:
+    '''Ta klasa reprezentuje Guzik, który jest używany do klikania w guzik, pobiera ona prostokat(rect),teskt guzika(text), ustawia wielkosc czcionki domyslnie(font_size=40),kolor guzika gdy jest na nim myszka ustawiony na niebieski(color_if_ON = BLUE), kolor guzika gdy nie ma na nim myszki ustawiony na czerwony(color_if_not = RED) oraz kolor tekstu widocznego na guziku ustawiony na bialy(text_color = WHITE) jako argumenty inicjalizacyjne'''
     def __init__(self,rect,text,font_size = 40,color_if_ON = BLUE , color_if_not = RED,text_color = WHITE):
 
         self.rect = pygame.Rect(rect) #x,y,szer,wys

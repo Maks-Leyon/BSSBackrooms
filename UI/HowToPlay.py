@@ -4,6 +4,7 @@ from Game.Settings import *
 
 
 class HowToPlay:
+    '''Ta klasa reprezentuje Podsekcje klasy Options - a dokladniej sterowanie, pobiera ona ekran (screen) jako argumenty inicjalizacyjne'''
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.SysFont(None, 40)

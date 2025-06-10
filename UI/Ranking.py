@@ -5,6 +5,7 @@ from Game.Settings import *
 from Game.SaveAndLoad import *
 
 class Ranking:
+    '''Ta klasa reprezentuje Ranking mozliwy do obejrzenia najlepszych graczy, pobiera ona ekran (screen) jako argumenty inicjalizacyjne'''
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.SysFont("Arial", 60)
